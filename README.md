@@ -1,5 +1,6 @@
 # NeuralNetworkDemo
-Ich will endlich ein Repository erstellen und hab Bock ein Neuronales Netz in C# zu koten. Deshalb exisitiert es ;)
+
+I wanted to add a Repository und I am motivated to make a Neural Network. Thats why this exists. I have no Idea what the Neural Network should do ;)
 
 # Installation
 
