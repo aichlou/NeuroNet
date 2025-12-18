@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "eHZc3D+cuUE=",
+  "success": true,
+  "projectFilePath": "/home/louis/Documents/GitHub/NeuralNetworkDemo/NeuralNetworkDemo/NeuralNetworkDemo.csproj",
+  "expectedPackageFiles": [
+    "/home/louis/.nuget/packages/microsoft.aspnetcore.app.ref/10.0.0/microsoft.aspnetcore.app.ref.10.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

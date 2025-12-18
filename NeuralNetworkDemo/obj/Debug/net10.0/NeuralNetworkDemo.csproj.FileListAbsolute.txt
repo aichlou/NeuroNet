@@ -1,0 +1,15 @@
+/home/louis/Documents/GitHub/NeuralNetworkDemo/NeuralNetworkDemo/bin/Debug/net10.0/NeuralNetworkDemo
+/home/louis/Documents/GitHub/NeuralNetworkDemo/NeuralNetworkDemo/bin/Debug/net10.0/NeuralNetworkDemo.deps.json
+/home/louis/Documents/GitHub/NeuralNetworkDemo/NeuralNetworkDemo/bin/Debug/net10.0/NeuralNetworkDemo.runtimeconfig.json
+/home/louis/Documents/GitHub/NeuralNetworkDemo/NeuralNetworkDemo/bin/Debug/net10.0/NeuralNetworkDemo.dll
+/home/louis/Documents/GitHub/NeuralNetworkDemo/NeuralNetworkDemo/bin/Debug/net10.0/NeuralNetworkDemo.pdb
+/home/louis/Documents/GitHub/NeuralNetworkDemo/NeuralNetworkDemo/obj/Debug/net10.0/NeuralNetworkDemo.GeneratedMSBuildEditorConfig.editorconfig
+/home/louis/Documents/GitHub/NeuralNetworkDemo/NeuralNetworkDemo/obj/Debug/net10.0/NeuralNetworkDemo.AssemblyInfoInputs.cache
+/home/louis/Documents/GitHub/NeuralNetworkDemo/NeuralNetworkDemo/obj/Debug/net10.0/NeuralNetworkDemo.AssemblyInfo.cs
+/home/louis/Documents/GitHub/NeuralNetworkDemo/NeuralNetworkDemo/obj/Debug/net10.0/NeuralNetworkDemo.csproj.CoreCompileInputs.cache
+/home/louis/Documents/GitHub/NeuralNetworkDemo/NeuralNetworkDemo/obj/Debug/net10.0/NeuralNetworkDemo.sourcelink.json
+/home/louis/Documents/GitHub/NeuralNetworkDemo/NeuralNetworkDemo/obj/Debug/net10.0/NeuralNetworkDemo.dll
+/home/louis/Documents/GitHub/NeuralNetworkDemo/NeuralNetworkDemo/obj/Debug/net10.0/refint/NeuralNetworkDemo.dll
+/home/louis/Documents/GitHub/NeuralNetworkDemo/NeuralNetworkDemo/obj/Debug/net10.0/NeuralNetworkDemo.pdb
+/home/louis/Documents/GitHub/NeuralNetworkDemo/NeuralNetworkDemo/obj/Debug/net10.0/NeuralNetworkDemo.genruntimeconfig.cache
+/home/louis/Documents/GitHub/NeuralNetworkDemo/NeuralNetworkDemo/obj/Debug/net10.0/ref/NeuralNetworkDemo.dll

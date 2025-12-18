@@ -2,19 +2,27 @@
 
 I wanted to add a Repository und I am motivated to make a Neural Network. Thats why this exists. I have no Idea what the Neural Network should do ;)
 
-# Installation
+# Requirements
+
+- .NET SDK 10.0 or newer
+  (Try to use it with lower versions i havened tested it yet)
+
+# Getting Started
+
+How to run the Project:
 
 ## Linux
 
-#### Arch
-
-Install the dotnet-runtime package from the AUR:
+Clone the Repository:
 ```
-yay -S dotnet-runtime
+git clone https://github.com/lou1008/NeuralNetworkDemo.git
 ```
-#### Debian
+Go into the folder and start the Programm
+```
+cd NeuralNetworkDemo
+dotnet run
+```
 
-#### Fedoraa
 ## Windows
 
 
