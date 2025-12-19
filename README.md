@@ -1,6 +1,13 @@
 # NeuralNetworkDemo
 
-I wanted to add a Repository und I am motivated to make a Neural Network. Thats why this exists. I have no Idea what the Neural Network should do ;)
+I wanted to add a Repository und I am motivated to make a Neural Network. Thats why this exists. I have no Idea what the Neural Network should do ;) It's my first Repo
+
+# About me
+
+<details>
+  <summary>Thats none of your business.</summary>
+    I use Arch btw
+</details>
 
 # Requirements
 
