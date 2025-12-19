@@ -11,7 +11,7 @@ I wanted to add a Repository und I am motivated to make a Neural Network. Thats 
 
 How to run the Project:
 
-## Linux
+## Linux & MacOS
 
 Clone the Repository:
 ```
@@ -24,6 +24,3 @@ dotnet run
 ```
 
 ## Windows
-
-
-## MacOS
