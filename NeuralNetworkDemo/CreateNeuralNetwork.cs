@@ -1,9 +1,10 @@
-namespace NeuralNetworkDemo;
-
-public static class Main
+namespace NeuralNetworkDemo
 {
-public static void CreateNeuralNetwork()
+  public class NeuralNetworkDemo
+  {
+    public static void Main()
     {
-        Neuron neuron1 = new Neuron(5.4);
+      Neuron neuron = new Neuron(5.4);
     }
+  }
 }
