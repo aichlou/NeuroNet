@@ -2,16 +2,9 @@
 
 I wanted to add a Repository und I am motivated to make a Neural Network. Thats why this exists. I have no Idea what the Neural Network should do ;) It's my first Repo
 
-# About me
-
-<details>
-  <summary>Thats none of your business.</summary>
-    I use Arch btw
-</details>
-
 # Stage of the Project
 
-I'm working on it right now. It hasn't done anything yet, except for saying some stupid things like "Created a neuron," which isn't true because I haven't programmed that yet. Because I'm just being lazy, like a piece of paper ;)
+I'm working on it right now. It can create neural networks, but running them? Nope, still can’t. It keeps saying dumb stuff like "Created a neuron," which… yeah, I actually did code that part, but it’s still too lazy to do anything useful—basically like a piece of paper ;)
 
 # Requirements
 
