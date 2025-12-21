@@ -1,4 +1,5 @@
 using System.Data;
+using System.Text.Json;
 
 namespace NeuralNetworkDemo;
 
@@ -6,6 +7,8 @@ public static class Main
 {
 public static void CreateNeuralNetwork()
     {
+        string baseDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        string appDataPath = Path.Combine(baseDataPath, "NeuroNet");
         bool Error;
         int layers = 0;
         do
@@ -67,8 +70,8 @@ public static void CreateNeuralNetwork()
         if(saveResponse.ToLower() == "y")
         {
             Console.WriteLine("How do you name the Neural Network?");
-            string nnName = Console.ReadLine() ?? "NeuralNetwork";
-            Console.WriteLine("This feature is not yet implemented, so the Neural Network will not actually be saved.");
+            string nnName = Console.ReadLine() ?? "MyNeuralNetwork";
+            Filemanagement.SaveNetworkToFile(nnName, JsonSerializer.Serialize(network));
         }
         else
         {
