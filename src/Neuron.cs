@@ -36,4 +36,12 @@ public class Neuron
         value = Functions.sigmoid(totalInput);
         return value;
     }
+    public void RandomizeWeights(Random rand, double minValue = -1.0, double maxValue = 1.0)
+    {
+        for (int i = 0; i < weights.Length; i++)
+        {
+            weights[i] = rand.NextDouble() * (maxValue - minValue) + minValue;
+        }
+        bias = rand.NextDouble() * (maxValue - minValue) + minValue;
+    }
 }
