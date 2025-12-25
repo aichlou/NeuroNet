@@ -89,36 +89,8 @@ public static List<List<Neuron>> CreateNeuralNetwork()
         {
             Console.WriteLine("How do you name the Neural Network?");
             string nnName = Console.ReadLine() ?? "MyNeuralNetwork";
-            List<List<NeuronDto>> dtoNetwork = new List<List<NeuronDto>>();
-            foreach(var layer in network)
-            {
-                List<NeuronDto> dtoLayer = new List<NeuronDto>();
-                foreach(var neuron in layer)
-                {
-                    dtoLayer.Add(neuron.ToDto());
-                }
-            }
-            string contentJson = JsonSerializer.Serialize(dtoNetwork);
-            string versionInfo =
-                    JsonSerializer
-                        .Deserialize<Dictionary<string, string>>(
-                            File.ReadAllText("../../../AppVersion.json")
-                        )?["version"]
-                    ?? "Unknown Version";
-            var metadata = new
-            {
-                Name = nnName,
-                Type = "Default",
-                Version = 0.1,
-                Description = "A Neural Network created with NeuroNet.",
-                GitHub = "https://github.com/aichlou/NeuroNet",
-                VersionOfProramm = versionInfo,
-                CreatedAt = DateTime.UtcNow,
-            };
-
-            string metadataJson = JsonSerializer.Serialize(metadata);
-            string combinedJson = "{ \"Metadata\": " + metadataJson + ", \"Network\": " + contentJson + " }";
-            Filemanagement.SaveNetworkToFile(nnName, combinedJson);
+            Filemanagement.SaveNetwork(nnName, network, "new");
+            Console.WriteLine("Neural Network saved as " + nnName);
         }
         else
         {

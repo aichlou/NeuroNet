@@ -38,28 +38,7 @@ namespace NeuroNet
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error deserializing Neural Network: " + e.Message);
-                Console.WriteLine("Do you want to report the Issue to GitHub? (y/n)");
-                string reportChoice = Console.ReadLine() ?? "y";
-                if (reportChoice.ToLower() == "y")
-                {
-                    Console.WriteLine("Opening GitHub Issues page...");
-                    string title = "Deserialization Error in NeuroNet";
-                    string body = $"Error Message: {e.Message}\n\nStack Trace:\n{e.StackTrace}\n\nPlease investigate the Neuron class serialization.";
-                    string url = $"https://github.com/aichlou/NeuroNet/issues/new?title={Uri.EscapeDataString(title)}&body={Uri.EscapeDataString(body)}";
-                    try
-                    {
-                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                        {
-                            FileName = url,
-                            UseShellExecute = true
-                        });
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Failed to open browser: " + ex.Message);
-                    }
-                }
+                GitHubReportIssue.ReportToGitHub("Failed to Load Neural Network", e.Message, e.StackTrace ?? "No stack trace available.", "Deserialization Error in LoadNeuralNetwork", true);
                 return new MultipleValues<List<List<Neuron>>>
                 {
                     Value = null!,
@@ -82,7 +61,6 @@ namespace NeuroNet
                     }
                 }
             }
-
 
             Console.WriteLine("Neural Network Structure:");
             foreach (var layer in network!)
