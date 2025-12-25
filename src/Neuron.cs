@@ -44,4 +44,22 @@ public class Neuron
         }
         bias = rand.NextDouble() * (maxValue - minValue) + minValue;
     }
+    public NeuronDto ToDto()
+    {
+        return new NeuronDto
+        {
+            type = "default",
+            bias = this.bias,
+            weights = this.weights
+        };
+    }
+}
+
+public class NeuronDto
+{
+    public string type { get; set; } = "default";
+    public double? bias { get; set; }
+    public double[]? weights { get; set; }
+
+
 }

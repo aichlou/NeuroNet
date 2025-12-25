@@ -7,14 +7,14 @@ public static class Filemanagement
 {
     static string baseDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
     static string appDataPath = Path.Combine(baseDataPath, "NeuroNet");
-    public static void SaveNetworkToFile(string nnName, string networkData)
+    public static void SaveNetworkToFile(string nnName, string jsonData)
     {
         if (!Directory.Exists(appDataPath))
         {
             Directory.CreateDirectory(appDataPath);
         }
         string filePath = Path.Combine(appDataPath, nnName + ".nn");
-        File.WriteAllText(filePath, networkData);
+        File.WriteAllText(filePath, jsonData);
         Console.WriteLine("Neural Network saved as " + nnName);
     }
     public static void ListSavedNetworks()
