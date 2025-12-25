@@ -7,6 +7,7 @@ using static NeuroNet.LoadNetwork;
 using static NeuroNet.RunNetwork;
 using static NeuroNet.Main;
 using static NeuroNet.Filemanagement;
+using static NeuroNet.Continue;
 
 int UserOutput;
 bool Error;
@@ -47,15 +48,7 @@ do
     }
 } while (Error);
 
-if (!Console.IsInputRedirected)
-{   Console.WriteLine("Press any key to continue...");
-    Console.ReadKey();
-}
-else
-{
-    Console.WriteLine("Input is redirected, Press Enter to continue...");
-    Console.Read(); //This is to prevent errors when input is redirected
-}
+PressKey();
 
 Console.WriteLine("Do you want to run the Neural Network now? (y/n)");
 if(Console.ReadLine()!.ToLower() == "y")
@@ -100,4 +93,4 @@ if(Console.ReadLine()!.ToLower() == "y")
     Console.WriteLine("Running Neural Network...");
 }
 Console.WriteLine("Exiting Program...");
-Console.ReadKey();
+PressKey();

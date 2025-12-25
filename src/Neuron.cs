@@ -24,7 +24,7 @@ public class Neuron
     {
         if (inputs.Length != weights.Length)
         {
-            throw new ArgumentException("Input length must match weights length.");
+            throw new ArgumentException("Input length must match weights length."); //Todo: Better error handling
         }
 
         double totalInput = bias;

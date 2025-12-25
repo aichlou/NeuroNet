@@ -41,9 +41,10 @@ public static class RunNetwork
         {
             for (int j = 0; j < network[i].Count; j++)
             {
+                Console.WriteLine("Processing Neuron " + (j + 1) + " in Layer " + (i + 1));
                 if (i == 0)
                 {
-                    network[i][j].Fire(inputData.ToArray());
+                    network[i][j].Fire([inputData.ToArray()[j]]);
                 }
                 else
                 {
