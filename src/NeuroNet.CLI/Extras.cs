@@ -1,11 +1,12 @@
-namespace NeuroNet;
+namespace NeuroNet.CLI;
 
-public static class Continue
+public class Extras
 {
     public static void PressKey()
     {
         if (!Console.IsInputRedirected)
-        {   Console.WriteLine("Press any key to continue...");
+        {   
+            Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
         }
         else

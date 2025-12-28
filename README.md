@@ -1,17 +1,34 @@
 # NeuroNet
 
-I wanted to add a Repository und I'm motivated to make a Neural Network. Thats why this exists. It can create Networks and runs them. You can use an API to send and get data from and to the netw ;) It's my first Repo
+NeuroNet is a from-scratch neural network framework in C# (.NET 8), built for learning, experimentation & architectural exploration.
+This project is unfinished on purpose, because learning is the point.
 
 # Stage of the Project
 
-I'm working on it right now. It can create neural networks, but running them? Nope, still can’t. It keeps saying dumb stuff like "Created a neuron," which… yeah, I actually did code that part, but it’s still too lazy to do anything useful—basically like a piece of paper ;)
+NeuroNet is currently in its **early pre-release stage**.
+
+At this point, the project provides a **working core implementation** for creating, saving, loading, and running simple neural networks. The internal architecture is being actively refined and may change significantly between versions.
+
+## What works
+- Core neural network structure
+- Network creation and execution
+- Serialization and deserialization of networks
+- Command-line based execution (CLI)
+
+## What does not work yet
+- Training / learning algorithms
+- Public API stability
+- Advanced network types or neuron variants
+- External integrations or bindings
+
+Breaking changes are expected. This pre-release is primarily intended for **development, experimentation, and architectural validation**, not for production use.
 
 # Requirements
 
-- .NET SDK 10.0 or newer
-  (Try to use it with lower versions i havened tested it yet)
-  [Download for Windows](https://dotnet.microsoft.com/en-us/download)
+- .NET SDK 8.0 or newer
+  [Download](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 - Git [Download for Windows](https://gitforwindows.org/)
+- Functional Computer (optional) 
 
 # Getting Started
 
@@ -26,5 +43,8 @@ git clone https://github.com/aichlou/NeuroNet.git
 Go into the folder and start the Programm
 ```
 cd NeuroNet/src
-dotnet run
+dotnet run --project NeuroNet.CLI
 ```
+
+# License
+MIT License - Copyright (c) 2026 Aichlou
