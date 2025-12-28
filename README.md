@@ -25,7 +25,7 @@ Breaking changes are expected. This pre-release is primarily intended for **deve
 
 # Requirements
 
-- .NET SDK 8.0. or newer
+- .NET SDK 8.0 or newer
   [Download](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 - Git [Download for Windows](https://gitforwindows.org/)
 - Functional Computer (optional) 
@@ -47,4 +47,4 @@ dotnet run --project NeuroNet.CLI
 ```
 
 # License
-MIT License
+MIT License - Copyright (c) 2026 Aichlou

@@ -1,7 +1,7 @@
 namespace NeuroNet.Core;
 
 public class Create {
-public static TwoValues<List<List<Neuron>>, string?> CreateNeuralNetwork(Action<string>? Message = null, Func<string>? readInput = null) //Creates a Neural Network based on user input
+public static TwoValues<List<List<Neuron>>, string?> CreateNeuralNetwork(Func<string> readInput, Action<string>? Message = null) //Creates a Neural Network based on user input
     {
         string baseDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         string appDataPath = Path.Combine(baseDataPath, "NeuroNet");
@@ -67,6 +67,11 @@ public static TwoValues<List<List<Neuron>>, string?> CreateNeuralNetwork(Action<
                         Error = true;
                     }
                 }
+                else if(neuronCount > 100000)
+                {
+                    Message?.Invoke("The maximum number of neurons per layer is 100000. Please enter a valid number.");
+                    Error = true;
+                }
             } while (Error);
             for (int j = 0; j < neuronCount; j++)
             {
@@ -87,6 +92,11 @@ public static TwoValues<List<List<Neuron>>, string?> CreateNeuralNetwork(Action<
         {
             Message?.Invoke("How do you name the Neural Network?");
             nnName = readInput?.Invoke() ?? "MyNeuralNetwork";
+            var invalidChars = Path.GetInvalidFileNameChars();
+            foreach (var c in invalidChars)
+            {
+                nnName = nnName.Replace(c, '_');
+            }
             Save.SaveNetwork(nnName, network, "new", Message);
             Message?.Invoke("Neural Network saved as " + nnName);
         }

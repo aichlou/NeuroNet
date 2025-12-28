@@ -20,10 +20,6 @@ public class Edit
                     break;
                 }
             }
-            if(allWeightsZero)
-            {
-                break;
-            }
         }
         if(allWeightsZero)
         {

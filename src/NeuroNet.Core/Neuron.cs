@@ -28,7 +28,7 @@ public class Neuron
             totalInput += inputs[i] * weights[i];
         }
 
-        value = sigmoid(totalInput);
+        value = Sigmoid(totalInput);
         return value;
     }
     public void RandomizeWeights(Random rand, double minValue = -1.0, double maxValue = 1.0)
@@ -48,7 +48,7 @@ public class Neuron
             weights = this.weights
         };
     }
-    public static double sigmoid(double x)
+    public static double Sigmoid(double x)
     {
         return 1 / (1 + Math.Exp(-x));
     }
@@ -64,6 +64,7 @@ public class NeuronDto
 
     public Neuron ToNeuron()
     {
-        return new Neuron(this.bias ?? 0, this.weights ?? Array.Empty<double>());
+        var weightsCopy = this.weights != null ? (double[])this.weights.Clone() : Array.Empty<double>();
+        return new Neuron(this.bias ?? 0, weightsCopy);
     }
 }

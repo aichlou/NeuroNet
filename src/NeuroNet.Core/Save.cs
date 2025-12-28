@@ -18,12 +18,12 @@ public class Save
         Message?.Invoke("Neural Network saved as " + nnName);
     }
 
-    public static void SaveNetwork(string nnName, List<List<Neuron>> network, string status, Action<string>? Message = null)
+    public static void SaveNetwork(string nnName, List<List<Neuron>> network, string status, Action<string>? Message = null, Func<string>? readInput = null)
     {
         if (status == "new" && File.Exists(Path.Combine(appDataPath, nnName + ".nn")))
         {
             Message?.Invoke("Neural Network already exists. Do you want to overwrite it? (y/n)");
-            string overwriteChoice = Console.ReadLine() ?? "n";
+            string overwriteChoice = readInput?.Invoke() ?? "n";
             if (overwriteChoice.ToLower() != "y")
             {
                 Message?.Invoke("Neural Network not saved.");
@@ -42,7 +42,9 @@ public class Save
                 "",
                 "",
                 "The user tried to overwrite a Neural Network that does not exist.",
-                true
+                true,
+                Message, 
+                readInput
             );
         }
         List<List<NeuronDto>> dtoNetwork = new List<List<NeuronDto>>();
@@ -56,17 +58,39 @@ public class Save
             dtoNetwork.Add(dtoLayer);
         }
         string contentJson = JsonSerializer.Serialize(dtoNetwork);
-        Message?.Invoke($"Debug: JSON Original: {JsonSerializer.Serialize(network)}");
-        Message?.Invoke($"Debug: Content JSON: {contentJson}");
-        string baseDir = AppContext.BaseDirectory;
-        Message?.Invoke($"Debug: Base Directory: {baseDir}");
-        string appVersionPath = Path.Combine(baseDir, "../../../../AppVersion.json");
-        string versionInfo =
-                JsonSerializer
-                    .Deserialize<Dictionary<string, string>>(
-                        File.ReadAllText(appVersionPath)
-                    )?["version"]
-                ?? "Unknown Version";
+        string versionInfo = "Unknown Version";
+        try
+        {
+            // Look for AppVersion.json in common locations
+            string? appVersionPath = null;
+            var searchPaths = new[]
+            {
+                Path.Combine(AppContext.BaseDirectory, "AppVersion.json"),
+                Path.Combine(AppContext.BaseDirectory, "../AppVersion.json"),
+                Path.Combine(AppContext.BaseDirectory, "../../../../AppVersion.json")
+            };
+
+            foreach (var path in searchPaths)
+            {
+                if (File.Exists(path))
+                {
+                    appVersionPath = path;
+                    break;
+                }
+            }
+
+            if (appVersionPath != null)
+            {
+                var versionData = JsonSerializer.Deserialize<Dictionary<string, string>>(
+                    File.ReadAllText(appVersionPath));
+                versionInfo = versionData?["version"] ?? "Unknown Version";
+            }
+        }
+        catch (Exception)
+        {
+            // Fall back to Unknown Version if reading fails
+            versionInfo = "Unknown Version";
+        }
         var metadata = new
         {
             Name = nnName,
@@ -74,12 +98,20 @@ public class Save
             Version = 0.1,
             Description = "A Neural Network created with NeuroNet.",
             GitHub = "https://github.com/aichlou/NeuroNet",
-            VersionOfProramm = versionInfo,
+            VersionOfProgram = versionInfo,
             CreatedAt = DateTime.UtcNow,
         };
 
-        string metadataJson = JsonSerializer.Serialize(metadata);
+        /*string metadataJson = JsonSerializer.Serialize(metadata);
         string combinedJson = "{ \"Metadata\": " + metadataJson + ", \"Network\": " + contentJson + " }";
-        SaveNetworkToFile(nnName, combinedJson);
+        SaveNetworkToFile(nnName, combinedJson); */
+
+        var combinedData = new
+        {
+            Metadata = metadata,
+            Network = dtoNetwork
+        };
+        string combinedJson = JsonSerializer.Serialize(combinedData);
+        SaveNetworkToFile(nnName, combinedJson, Message);
     }
 }
