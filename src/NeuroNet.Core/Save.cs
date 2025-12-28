@@ -15,7 +15,6 @@ public class Save
         }
         string filePath = Path.Combine(appDataPath, nnName + ".nn");
         File.WriteAllText(filePath, jsonData);
-        Message?.Invoke("Neural Network saved as " + nnName);
     }
 
     public static void SaveNetwork(string nnName, List<List<Neuron>> network, string status, Action<string>? Message = null, Func<string>? readInput = null)

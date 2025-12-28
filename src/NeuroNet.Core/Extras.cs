@@ -30,9 +30,9 @@ public static class GitHubReportIssue
     }
 }
 
-public class MultipleValues<T>
+public class MultipleValues<T1>
 {
-    public T? Value { get; init; }
+    public T1? Value { get; init; }
     public bool HasError { get; init; }
     public string? ErrorMessage { get; init; }
 }
