@@ -58,7 +58,7 @@ public class Neuron
 
 public class NeuronDto
 {
-    public string type { get; set; } = "default";
+    public string type { get; set; } = "sigmoid";
     public double? bias { get; set; }
     public double[]? weights { get; set; }
 

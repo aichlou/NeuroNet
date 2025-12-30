@@ -30,7 +30,7 @@ internal class Program
                     currentnnName = OutputCreate.Value2 ?? "MyNeuralNetwork";
                     break;
                 case 2:
-                    var result = Load.LoadNeuralNetwork(Console.WriteLine, () => Console.ReadLine() ?? string.Empty);
+                    var result = NeuroNet.Core.Load.LoadNeuralNetwork(Console.WriteLine, () => Console.ReadLine() ?? string.Empty);
                     if (result.HasError)
                     {
                         Error = true;
@@ -64,19 +64,41 @@ internal class Program
                 Extras.PressKey();
             }
         }
-
-        Console.WriteLine("Do you want to run the Neural Network now? (y/n)");
-        if((Console.ReadLine() ?? string.Empty).ToLower() == "y")
-        {
-            double[] output = Run.Run_Network(LoadedNetwork).Value ?? throw new Exception("Loaded Network cannot be null");
-            for(int i = 0; i <= output.Length; i++)
+        UserOutput = 0;
+        do {
+            Error = false;
+            Console.WriteLine("What do you want to do?");
+            Console.WriteLine("1. Run the Neural Network");
+            Console.WriteLine("2. Let the Neural Network learn");
+            if (!int.TryParse(Console.ReadLine(), out UserOutput))
             {
-                Console.Write("Debug: " + output[i]);
+                Console.WriteLine("Please type in a valid number");
+                Error = true;
             }
-            Console.WriteLine();
-            
+            else
+            {
+                switch(UserOutput)
+                {
+                    case 1:
+                        double[] output = Run.Run_Network(LoadedNetwork).Value ?? throw new Exception("Loaded Network cannot be null");
+                        for(int i = 0; i <= output.Length; i++)
+                        {
+                            Console.WriteLine($"Neuron {i + 1}: {output[i]}");
+                        }
+                        break;
+                    case 2:
+                        Console.WriteLine("This feature is in the working process...");
+
+                        break;
+                    default:
+                        Console.WriteLine("Please insert one of the shown Options");
+                        Error = true;
+                        break;
+                }
+            }
+            Console.WriteLine("Exiting Program...");
+            Extras.PressKey();
         }
-        Console.WriteLine("Exiting Program...");
-        Extras.PressKey();
+        while (Error);
     }
 }

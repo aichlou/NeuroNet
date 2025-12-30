@@ -31,13 +31,13 @@ public class Run
             }
         }
         double[] output = new double[lastLayer.Count];
-        Message?.Invoke("Neural Network Output:");
+        /*Message?.Invoke("Neural Network Output:");
         for (int j = 0; j < lastLayer.Count; j++)
         {
             output[j] = lastLayer[j].value;
             //Message?.Invoke($"Output {j}: {output[j]}");
             Message?.Invoke($"Neuron {j + 1}: {output[j]}");
-        }
+        } */
         return output;
     }
 }

@@ -1,6 +1,9 @@
 
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using CsvHelper;
+using CsvHelper.Configuration;
+using System.Globalization;
 using System.Text.Json;
 namespace NeuroNet.Core;
 
@@ -190,4 +193,29 @@ public class Load {
         public DateTime CreatedAt { get; set; }
     }
 
+    public List<double[]> LoadCSV(string filelocation)
+    {
+        var lines = File.ReadAllLines(filelocation);
+        var rows = new List<double[]>();
+
+        foreach (var line in lines)
+        {
+            if (string.IsNullOrWhiteSpace(line)) continue;
+
+            var values = line.Split(';')
+                            .Select(v => double.Parse(v, CultureInfo.InvariantCulture))
+                            .ToArray();
+
+            rows.Add(values);
+        }
+        var fields = rows;
+        return fields;
+    }
+
+    public TwoValues<double[], double[]> OrderValues(List<double[]> fields, int input_Numbers)
+    {
+        
+
+        return new TwoValues<double[], double[]> { Value1 = new double[1], Value2 = new double[1]} ;
+    }
 }
