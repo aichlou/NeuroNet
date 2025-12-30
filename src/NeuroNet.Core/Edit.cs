@@ -2,7 +2,7 @@ namespace NeuroNet.Core;
 
 public class Edit
 {
-    public static void RandomizeIfNeeded(List<List<Neuron>> network, Action<string>? Message)
+    public static bool RandomizeIfNeeded(List<List<Neuron>> network, Action<string>? Message)
     {
         bool allWeightsZero = true;
         for (int i = 0; i < network.Count; i++)
@@ -12,12 +12,12 @@ public class Edit
                 if(network[i][j].weights.All(x => x != 0))
                 {
                     allWeightsZero = false;
-                    break;
+                    return false;
                 }
                 if(network[i][j].bias != 0)
                 {
                     allWeightsZero = false;
-                    break;
+                    return false;
                 }
             }
         }
@@ -33,6 +33,8 @@ public class Edit
                 }
             }
             Message?.Invoke("Weights randomized.");
+            return true;
         }
+        return false;
     }
 }

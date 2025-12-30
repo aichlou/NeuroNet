@@ -49,25 +49,31 @@ internal class Program
         } while (Error);
 
         Extras.PressKey();
-        Edit.RandomizeIfNeeded(LoadedNetwork!, (message) => Console.WriteLine(message));
-        Console.WriteLine("Do you want to save randomized weights and biases? (y/n)");
-        if((Console.ReadLine() ?? string.Empty).ToLower() == "y")
-        {
-            Save.SaveNetwork(currentnnName, LoadedNetwork!, "overwrite", Console.WriteLine); // Hardcoded name for testing
-        }
-        else
-        {
-            Console.WriteLine("Neural Network changes not saved.");
-            Console.WriteLine("If you do something with the Network in this session, you will do it with the randomized weights and biases, but they won't be saved.");
-            Console.WriteLine("Continuing without saving...");
-            Extras.PressKey();
+        bool wasRandomized = Edit.RandomizeIfNeeded(LoadedNetwork!, (message) => Console.WriteLine(message));
+        if (wasRandomized) {
+            Console.WriteLine("Do you want to save randomized weights and biases? (y/n)");
+            if((Console.ReadLine() ?? string.Empty).ToLower() == "y")
+            {
+                Save.SaveNetwork(currentnnName, LoadedNetwork!, "overwrite", Console.WriteLine); // Hardcoded name for testing
+            }
+            else
+            {
+                Console.WriteLine("Neural Network changes not saved.");
+                Console.WriteLine("If you do something with the Network in this session, you will do it with the randomized weights and biases, but they won't be saved.");
+                Console.WriteLine("Continuing without saving...");
+                Extras.PressKey();
+            }
         }
 
         Console.WriteLine("Do you want to run the Neural Network now? (y/n)");
         if((Console.ReadLine() ?? string.Empty).ToLower() == "y")
         {
-            double[] output = Run.Run_Network(LoadedNetwork).Value ?? new double[0];
-            //Console.WriteLine($"Debug: This are the Values in one Array: {output}");
+            double[] output = Run.Run_Network(LoadedNetwork).Value ?? throw new Exception("Loaded Network cannot be null");
+            for(int i = 0; i <= output.Length; i++)
+            {
+                Console.Write("Debug: " + output[i]);
+            }
+            Console.WriteLine();
             
         }
         Console.WriteLine("Exiting Program...");

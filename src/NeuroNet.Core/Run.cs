@@ -18,7 +18,7 @@ public class Run
         {
             for (int j = 0; j < network[i].Count; j++)
             {
-                Message?.Invoke("Processing Neuron " + (j + 1) + " in Layer " + (i + 1));
+                //Message?.Invoke("Processing Neuron " + (j + 1) + " in Layer " + (i + 1));
                 if (i == 0)
                 {
                     network[i][j].Fire([inputData[j]]);
@@ -35,6 +35,7 @@ public class Run
         for (int j = 0; j < lastLayer.Count; j++)
         {
             output[j] = lastLayer[j].value;
+            //Message?.Invoke($"Output {j}: {output[j]}");
             Message?.Invoke($"Neuron {j + 1}: {output[j]}");
         }
         return output;

@@ -56,6 +56,12 @@ public class Run
             while(Error);
             Console.WriteLine("Running Neural Network...");
             double[] output = NeuroNet.Core.Run.RunNeuralNetwork(LoadedNetwork!, inputData, (message) => Console.WriteLine(message));
+            for (int j = 0; j < output.Length; j++)
+            {
+                output[j] = output[j];
+                Console.WriteLine($"Output {j}: {output[j]}");
+            }
+
             return new MultipleValues<double[]>
             {
                 Value = output,
