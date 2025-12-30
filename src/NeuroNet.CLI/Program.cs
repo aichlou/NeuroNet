@@ -13,7 +13,7 @@ internal class Program
         {
             Error = false;
             Console.Clear();
-            Console.WriteLine("Neural Network Demo");
+            Console.WriteLine("NeuroNet");
             Console.WriteLine("What would you like to do?");
             Console.WriteLine("1. Create a NeuralNetwork");
             Console.WriteLine("2. Load a NeuralNetwork");

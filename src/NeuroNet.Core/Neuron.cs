@@ -2,7 +2,7 @@ namespace NeuroNet.Core;
 
 public class Neuron
 {
-   public double bias;
+    public double bias;
     public double[] weights;
     public double value;
     public Neuron(double bias, double[] weights)
