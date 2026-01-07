@@ -1,3 +1,5 @@
+using System.Reflection.Metadata.Ecma335;
+
 namespace NeuroNet.Core;
 
 public class Edit
@@ -29,6 +31,25 @@ public class Edit
             for (int j = 0; j < network[i].Count; j++)
             {
                 network[i][j].RandomizeWeights(rand);
+            }
+        }
+        return network;
+    }
+
+    public static List<List<Neuron>> adjustweights(List<List<Neuron>> network)
+    {
+        for(int i=0; i < network.Count; i++)
+        {
+            for(int j=0; j < network[i].Count; j++)
+            {
+                if(i == 0)
+                {
+                    network[i][j].EditWeights(new double[1]);
+                }
+                else
+                {
+                    network[i][j].EditWeights(new double[network[i - 1].Count]);
+                }
             }
         }
         return network;

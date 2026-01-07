@@ -30,10 +30,12 @@ internal class Program
                     currentnnName = SaveCLI.SaveNetworkToFile(LoadedNetwork, "new");
                     break;
                 case 2:
-                    var result = NeuroNet.Core.Load.LoadNeuralNetwork(Console.WriteLine, () => Console.ReadLine() ?? string.Empty);
+                    //var result = Load.LoadNeuralNetwork(Console.WriteLine, () => Console.ReadLine() ?? string.Empty);
+                    var result = LoadCLI.LoadNeuralNetwork();
                     if (result.HasError)
                     {
                         Error = true;
+                        Extras.PressKey();
                     }
                     else
                     {
@@ -68,7 +70,7 @@ internal class Program
                 switch(UserOutput)
                 {
                     case 1:
-                        double[]? output = Run.Run_Network(LoadedNetwork).Value  ?? throw new Exception("Network Output cannot be null"); //No Error handeling
+                        double[]? output = RunCLI.Run_Network(LoadedNetwork).Value  ?? throw new Exception("Network Output cannot be null"); //No Error handeling
                         for(int i = 0; i <= output.Length; i++)
                         {
                             Console.WriteLine($"Neuron {i + 1}: {output[i]}");

@@ -3,8 +3,10 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using CsvHelper;
 using CsvHelper.Configuration;
+using System.IO;
 using System.Globalization;
 using System.Text.Json;
+using System.Collections.Specialized;
 namespace NeuroNet.Core;
 
 public class Load {
@@ -15,10 +17,10 @@ public class Load {
     public static MultipleValues<TwoValues<List<List<Neuron>>, string?>> LoadNeuralNetwork(Action<string>? Message = null, Func<string>? readInput = null)
     {
         Message?.Invoke("Loading Neural Network...");
-        ListSavedNetworks(Message);
+        ListSavedNetworks();
         Message?.Invoke("Please type in the name of the Neural Network you would like to load:");
         string? nnName = readInput?.Invoke();
-        nnName = NameOf(nnName, Message);
+        nnName = NameOf(nnName);
         string networkData = ContentOf(nnName, Message);
         if (string.IsNullOrEmpty(networkData))
         {
@@ -85,35 +87,27 @@ public class Load {
             ErrorMessage = string.Empty
         };
     }
-    public static void ListSavedNetworks(Action<string>? Message = null)
+    public static string[]? ListSavedNetworks(string? DirectoryPath = null)
     {
-        if (!Directory.Exists(appDataPath))
+        if(DirectoryPath == null) DirectoryPath = appDataPath;
+        if (!Directory.Exists(DirectoryPath))
         {
-            Message?.Invoke("No saved Neural Networks found.");
-            return;
+            return Array.Empty<string>();
         }
         string[] files;
-        try
-        {
-            files = Directory.GetFiles(appDataPath, "*.nn");
-        }
-        catch (Exception ex)
-        {
-            Message?.Invoke($"Error accessing saved networks: {ex.Message}");
-            return;
-        }
+        files = Directory.GetFiles(DirectoryPath, "*.nn");
         if (files.Length == 0)
         {
-            Message?.Invoke("No saved Neural Networks found.");
-            return;
+            return new string [0];
         }
-        Message?.Invoke("Saved Neural Networks:");
-        int index = 1;
+        int index = 0;
+        string[] output = new string[files.Length];
         foreach (string file in files)
         {
-            Message?.Invoke(index + ". " + Path.GetFileNameWithoutExtension(file));
+            output[index] = Path.GetFileNameWithoutExtension(file);
             index++;
         }
+        return output;
     }
 
     public static string ContentOf(string? nnName, Action<string>? Message = null)
@@ -138,11 +132,27 @@ public class Load {
         }
     }
 
-    public static string NameOf(string? nnName, Action<string>? Message = null) //Returns the Name of a File (in the App Data Path) if it exists based on the name or a number
+    public static List<List<Neuron>>? JsonToList (string networkData)
+    {
+        List<List<NeuronDto>>? networkDto;
+        try
+        {
+            var file = JsonSerializer.Deserialize<FileDto>(networkData) ?? throw new Exception("Deserialized file is null.");
+            networkDto = file.Network;
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("An Error occurred while deserializing the Neural Network.");
+            return new List<List<Neuron>>{};
+        }
+        List<List<Neuron>>? network = networkDto?.Select(layer => layer.Select(neuronDto => neuronDto.ToNeuron()).ToList()).ToList();
+        return network;
+    }
+
+    public static string NameOf(string? nnName) //Returns the Name of a File (in the App Data Path) if it exists based on the name or a number
     {
         if (string.IsNullOrEmpty(nnName))
         {
-            Message?.Invoke("Neural Network name cannot be empty.");
             return string.Empty;
         }
 
@@ -150,15 +160,13 @@ public class Load {
         {
             if (!Directory.Exists(appDataPath))
             {
-                Message?.Invoke("No saved Neural Networks found.");
                 return string.Empty;
             }
             string[] files = Directory.GetFiles(appDataPath, "*.nn");
             int fileIndex = number - 1;
             if (fileIndex < 0 || fileIndex >= files.Length)
             {
-                Message?.Invoke("Invalid Neural Network selection.");
-                return string.Empty;
+                return string.Empty; //should Retrun an Error
             }
             nnName = Path.GetFileNameWithoutExtension(files[fileIndex]);
         }
@@ -169,7 +177,6 @@ public class Load {
 
         if (!Directory.Exists(appDataPath))
         {
-            Message?.Invoke("No saved Neural Networks found.");
             return string.Empty;
         }
 

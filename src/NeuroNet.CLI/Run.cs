@@ -2,7 +2,7 @@ using NeuroNet.Core;
 
 namespace NeuroNet.CLI;
 
-public class Run
+public class RunCLI
 {
     public static MultipleValues<double[]> Run_Network(List<List<Neuron>>? LoadedNetwork)
     {
