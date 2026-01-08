@@ -60,6 +60,16 @@ class LoadCLI {
                 ErrorMessage = "Conversion Error."
             };
         }
+        if (network.Count == 0)
+        {
+            Console.WriteLine("The Network Data of your File is empty. Please select another file");
+            return new MultipleValues<TwoValues<List<List<Neuron>>, string?>>
+            {
+                Value = null!,
+                HasError = true,
+                ErrorMessage = "File is empty"
+            };
+        }
         network = Edit.adjustweights(network);
         Console.WriteLine("Neural Network Structure:");
         foreach (var layer in network!)

@@ -24,22 +24,9 @@ public class Save
             Message?.Invoke("Neural Network already exists.");
             return "already existing";
         }
-        if (status == "overwrite" && File.Exists(Path.Combine(appDataPath, nnName + ".nn")))
-        {
-            Message?.Invoke("Overwriting existing Neural Network: " + nnName);
-        }
         if (status == "overwrite" && !File.Exists(Path.Combine(appDataPath, nnName + ".nn")))
         {
             Message?.Invoke("Neural Network does not exist. Saving as new Neural Network: " + nnName);
-            GitHubReportIssue.ReportToGitHub(
-                "Attempted to overwrite a non-existing Neural Network.",
-                "",
-                "",
-                "The user tried to overwrite a Neural Network that does not exist.",
-                true,
-                Message, 
-                readInput
-            );
         }
         List<List<NeuronDto>> dtoNetwork = new List<List<NeuronDto>>();
         foreach(var layer in network)
@@ -88,7 +75,7 @@ public class Save
         {
             Name = nnName,
             Type = "Default",
-            Version = 0.1,
+            Version = 0.1, 
             Description = "A Neural Network created with NeuroNet.",
             GitHub = "https://github.com/aichlou/NeuroNet",
             VersionOfProgram = versionInfo,
