@@ -67,7 +67,6 @@ public class RunCLI
             {
                 output[j] = output[j];
             }
-
             return new MultipleValues<double[]>
             {
                 Value = output,

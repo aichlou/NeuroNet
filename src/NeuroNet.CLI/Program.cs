@@ -78,7 +78,16 @@ internal class Program
                         break;
                     case 2:
                         Console.WriteLine("This feature is in the working process...");
-                        Learn.UserDialoge(LoadedNetwork);
+                        Console.WriteLine("CAREFUL: This feature isn't working yet");
+                        try {
+                            Learn.UserDialoge(LoadedNetwork);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine($"You Exited the Learning Process with the Exception {e.Data}");
+                        }
+                        Console.WriteLine("You Exited the Learning Process Sucessfully");
                         break;
                     default:
                         Console.WriteLine("Please insert one of the shown Options");

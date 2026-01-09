@@ -22,7 +22,7 @@ public class Run
             {
                 if (i == 0)
                 {
-                    outputs[0,j] = network[i][j].Fire([inputData[j]]);
+                    outputs[i, j] = network[i][j].Fire(inputData.ToArray());
                 }
                 else
                 {
