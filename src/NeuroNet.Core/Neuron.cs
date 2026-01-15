@@ -1,3 +1,5 @@
+using System.Reflection.Metadata.Ecma335;
+
 namespace NeuroNet.Core;
 
 public class Neuron
@@ -43,7 +45,7 @@ public class Neuron
     {
         return new NeuronDto
         {
-            type = "default",
+            type = "sigmoid",
             bias = this.bias,
             weights = this.weights
         };
@@ -54,6 +56,14 @@ public class Neuron
     }
 }
 
+public class InputNeuron
+{
+    public double value;
+    public InputNeuron (double input)
+    {
+        this.value = input;
+    }
+}
 
 
 public class NeuronDto
