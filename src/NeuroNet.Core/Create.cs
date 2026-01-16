@@ -16,10 +16,10 @@ public class Create {
             {
                 if(i == 0)
                 {
-                    network[i].Add(new Neuron(0, [0]));
+                    network[i].Add(new InputNeuron());
                 }
                 else {
-                    network[i].Add(new Neuron(0, new double[network[i - 1].Count]));
+                    network[i].Add(new SigmoidNeuron(0, new double[network[i - 1].Count]));
                 }
             }
         }

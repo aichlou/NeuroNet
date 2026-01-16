@@ -65,11 +65,7 @@ public class Load {
         {
             for(int j=0; j < network[i].Count; j++)
             {
-                if(i == 0)
-                {
-                    network[i][j].EditWeights(new double[1]);
-                }
-                else
+                if(i != 0)
                 {
                     network[i][j].EditWeights(new double[network[i - 1].Count]);
                 }

@@ -2,22 +2,31 @@ using System.Reflection.Metadata.Ecma335;
 
 namespace NeuroNet.Core;
 
-public class Neuron
+
+public abstract class Neuron
+{
+    //public double[] weights;
+    public double value;
+    public abstract double Fire(double[] inputs);
+    public abstract NeuronDto ToDto();
+    public abstract void EditWeights(double[] newWeights);
+}
+public class SigmoidNeuron : Neuron
 {
     public double bias;
     public double[] weights;
-    public double value;
-    public Neuron(double bias, double[] weights)
+    //public double value;
+    public SigmoidNeuron(double bias, double[] weights)
     {
         this.bias = bias;
         this.weights = weights;
         this.value = 0;
     }
-    public void EditWeights(double[] newWeights)
+    public override void EditWeights(double[] newWeights)
     {
         this.weights = newWeights;
     }
-    public double Fire(double[] inputs)
+    override public double Fire(double[] inputs)
     {
         if (inputs.Length != weights.Length)
         {
@@ -41,7 +50,7 @@ public class Neuron
         }
         bias = rand.NextDouble() * (maxValue - minValue) + minValue;
     }
-    public NeuronDto ToDto()
+    public override NeuronDto ToDto()
     {
         return new NeuronDto
         {
@@ -56,12 +65,26 @@ public class Neuron
     }
 }
 
-public class InputNeuron
+public class InputNeuron : Neuron
 {
-    public double value;
-    public InputNeuron (double input)
+    //public double value;
+    public InputNeuron ()
     {
-        this.value = input;
+    }
+    public override double Fire(double[] inputs)
+    {
+        return this.value;
+    }
+    public override NeuronDto ToDto()
+    {
+        return new NeuronDto
+        {
+            type = "Input"
+        };
+    }
+    public override void EditWeights(double[] newWeights)
+    {
+        throw new Exception("You should not be able to weight this Connection");
     }
 }
 
@@ -75,6 +98,14 @@ public class NeuronDto
     public Neuron ToNeuron()
     {
         var weightsCopy = this.weights != null ? (double[])this.weights.Clone() : Array.Empty<double>();
-        return new Neuron(this.bias ?? 0, weightsCopy);
+        switch(type)
+        {
+            case "sigmoid":
+                return new SigmoidNeuron(this.bias ?? 0, weightsCopy);
+            case "Input":
+                return new InputNeuron();
+            default: //Assume that it is a sigmoid Neuron
+                return new SigmoidNeuron(this.bias ?? 0, weightsCopy);
+        }
     }
 }
