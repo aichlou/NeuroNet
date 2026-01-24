@@ -2,31 +2,29 @@ using System.Reflection.Metadata.Ecma335;
 
 namespace NeuroNet.Core;
 
-
-public abstract class Neuron
-{
-    //public double[] weights;
-    public double value;
-    public abstract double Fire(double[] inputs);
-    public abstract NeuronDto ToDto();
-    public abstract void EditWeights(double[] newWeights);
-}
-public class SigmoidNeuron : Neuron
+public class Neuron
 {
     public double bias;
     public double[] weights;
-    //public double value;
-    public SigmoidNeuron(double bias, double[] weights)
+    public double value;
+    public Neuron(double bias, double[] weights)
     {
         this.bias = bias;
         this.weights = weights;
         this.value = 0;
     }
-    public override void EditWeights(double[] newWeights)
+
+    public Neuron()
+    {
+        this.bias = 0;
+        this.weights = Array.Empty<double>();
+        this.value = 0;
+    }
+    public void EditWeights(double[] newWeights)
     {
         this.weights = newWeights;
     }
-    override public double Fire(double[] inputs)
+    public double Fire(double[] inputs)
     {
         if (inputs.Length != weights.Length)
         {
@@ -50,7 +48,7 @@ public class SigmoidNeuron : Neuron
         }
         bias = rand.NextDouble() * (maxValue - minValue) + minValue;
     }
-    public override NeuronDto ToDto()
+    public NeuronDto ToDto()
     {
         return new NeuronDto
         {
@@ -64,31 +62,6 @@ public class SigmoidNeuron : Neuron
         return 1 / (1 + Math.Exp(-x));
     }
 }
-
-public class InputNeuron : Neuron
-{
-    //public double value;
-    public InputNeuron ()
-    {
-    }
-    public override double Fire(double[] inputs)
-    {
-        return this.value;
-    }
-    public override NeuronDto ToDto()
-    {
-        return new NeuronDto
-        {
-            type = "Input"
-        };
-    }
-    public override void EditWeights(double[] newWeights)
-    {
-        throw new Exception("You should not be able to weight this Connection");
-    }
-}
-
-
 public class NeuronDto
 {
     public string type { get; set; } = "sigmoid";
@@ -101,11 +74,11 @@ public class NeuronDto
         switch(type)
         {
             case "sigmoid":
-                return new SigmoidNeuron(this.bias ?? 0, weightsCopy);
-            case "Input":
-                return new InputNeuron();
+                return new Neuron(this.bias ?? 0, weightsCopy);
+            case "input":
+                throw new Exception("Your using a old Network or a old Programm. Please update to the latest version."); //Todo: Add Network-Repairing-Tool
             default: //Assume that it is a sigmoid Neuron
-                return new SigmoidNeuron(this.bias ?? 0, weightsCopy);
+                return new Neuron(this.bias ?? 0, weightsCopy);
         }
     }
 }

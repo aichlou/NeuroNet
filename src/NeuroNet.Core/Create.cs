@@ -9,17 +9,17 @@ public class Create {
         List<List<Neuron>> network = new List<List<Neuron>>();
         for (int i = 0; i < layers; i++) 
         {
-            int neuronCount = networkData[i];
+            int neuronCount = networkData[i + 1];
             network.Add(new List<Neuron>());
 
             for (int j = 0; j < neuronCount; j++)
             {
                 if(i == 0)
                 {
-                    network[i].Add(new InputNeuron());
+                    network[i].Add(new Neuron(0, new double[networkData[0]])); //Mumpitz?
                 }
                 else {
-                    network[i].Add(new SigmoidNeuron(0, new double[network[i - 1].Count]));
+                    network[i].Add(new Neuron(0, new double[network[i - 1].Count]));
                 }
             }
         }
