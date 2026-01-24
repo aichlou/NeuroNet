@@ -18,7 +18,7 @@ public class RunCLI
                     ErrorMessage = "No Loaded Network"
                 };
             }
-            int InputLength = LoadedNetwork[0].Count;
+            int InputLength = LoadedNetwork[0][0].GetWeights().Length;
             do {
                 Error = false;
                 Console.WriteLine($"You have to Input {InputLength} Values.");

@@ -48,6 +48,10 @@ public class Neuron
         }
         bias = rand.NextDouble() * (maxValue - minValue) + minValue;
     }
+    public double[] GetWeights()
+    {
+        return this.weights;
+    }
     public NeuronDto ToDto()
     {
         return new NeuronDto

@@ -10,7 +10,7 @@ public class Run
         if (network == null) throw new ArgumentNullException(nameof(network));
         if (inputData == null) throw new ArgumentNullException(nameof(inputData));
         if (network.Count == 0) throw new ArgumentException("Network cannot be empty.", nameof(network));
-        if (network[0].Count != inputData.Count) throw new ArgumentException($"Input data count ({inputData.Count}) must match first layer neuron count ({network[0].Count}).");
+        if (network[0][0].GetWeights().Length != inputData.Count) throw new ArgumentException($"Input data count ({inputData.Count}) must match input layer neuron count ({network[0][0].GetWeights().Length}).");
            
         var lastLayer = network[network.Count - 1];
         double[] networkoutput = new double[lastLayer.Count];

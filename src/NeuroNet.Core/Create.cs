@@ -5,7 +5,7 @@ public class Create {
     {
         string baseDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         string appDataPath = Path.Combine(baseDataPath, "NeuroNet");
-        int layers = networkData.Length;  
+        int layers = networkData.Length - 1;  
         List<List<Neuron>> network = new List<List<Neuron>>();
         for (int i = 0; i < layers; i++) 
         {
