@@ -1,3 +1,5 @@
+using System.Reflection.Metadata.Ecma335;
+
 namespace NeuroNet.Core;
 
 public class Neuron
@@ -9,6 +11,13 @@ public class Neuron
     {
         this.bias = bias;
         this.weights = weights;
+        this.value = 0;
+    }
+
+    public Neuron()
+    {
+        this.bias = 0;
+        this.weights = Array.Empty<double>();
         this.value = 0;
     }
     public void EditWeights(double[] newWeights)
@@ -39,11 +48,15 @@ public class Neuron
         }
         bias = rand.NextDouble() * (maxValue - minValue) + minValue;
     }
+    public double[] GetWeights()
+    {
+        return this.weights;
+    }
     public NeuronDto ToDto()
     {
         return new NeuronDto
         {
-            type = "default",
+            type = "sigmoid",
             bias = this.bias,
             weights = this.weights
         };
@@ -53,9 +66,6 @@ public class Neuron
         return 1 / (1 + Math.Exp(-x));
     }
 }
-
-
-
 public class NeuronDto
 {
     public string type { get; set; } = "sigmoid";
@@ -65,6 +75,14 @@ public class NeuronDto
     public Neuron ToNeuron()
     {
         var weightsCopy = this.weights != null ? (double[])this.weights.Clone() : Array.Empty<double>();
-        return new Neuron(this.bias ?? 0, weightsCopy);
+        switch(type)
+        {
+            case "sigmoid":
+                return new Neuron(this.bias ?? 0, weightsCopy);
+            case "input":
+                throw new Exception("Your using a old Network or a old Programm. Please update to the latest version."); //Todo: Add Network-Repairing-Tool
+            default: //Assume that it is a sigmoid Neuron
+                return new Neuron(this.bias ?? 0, weightsCopy);
+        }
     }
 }

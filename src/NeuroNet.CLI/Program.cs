@@ -21,6 +21,7 @@ internal class Program
             if (!int.TryParse(Console.ReadLine() ?? string.Empty, out UserOutput))
             {
                 Console.WriteLine("Please type in a valid number");
+                Extras.PressKey();
                 Error = true;
             }
             switch (UserOutput)
@@ -43,8 +44,11 @@ internal class Program
                     }
                     break;
                 default:
+                    if(!Error) {
                     Console.WriteLine("Please type in one of the shown options");
+                    Extras.PressKey();
                     Error = true;
+                    }
                     break;
             }
         } while (Error);

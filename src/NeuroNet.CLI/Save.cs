@@ -14,6 +14,7 @@ class SaveCLI
                 saveResponse = Console.ReadLine() ?? string.Empty;
                 if(saveResponse.ToLower() == "y") {
                     Console.WriteLine("How do you name the Neural Network?");
+                    try {
                     do
                     {
                         nnName = Console.ReadLine()!;
@@ -24,6 +25,12 @@ class SaveCLI
                     foreach (var c in invalidChars)
                     {
                         nnName = nnName.Replace(c, '_');
+                    }
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("An error occurred while reading the Neural Network name. Neural Network not saved.");
+                        return "NoName";
                     }
                 }
                 else
