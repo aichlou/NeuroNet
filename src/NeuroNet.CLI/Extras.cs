@@ -15,6 +15,11 @@ public class Extras
             Console.Read(); //This is to prevent errors when input is redirected
         }
         Console.WriteLine();
+
     }
-    
+    public static bool isReturn(string? input)
+    {
+        if (input == null) return false;
+        return input.Trim().ToLower() == Program.returnString;
+    }
 }

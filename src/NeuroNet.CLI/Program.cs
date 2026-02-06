@@ -4,6 +4,7 @@ namespace NeuroNet.CLI;
 
 internal class Program
 {
+    public const string returnString = "return";
     public static void Main(string[] args)
     {
         int UserOutput;
@@ -18,17 +19,35 @@ internal class Program
             Console.WriteLine("What would you like to do?");
             Console.WriteLine("1. Create a NeuralNetwork");
             Console.WriteLine("2. Load a NeuralNetwork");
-            if (!int.TryParse(Console.ReadLine() ?? string.Empty, out UserOutput))
+            string UserOutputString = Console.ReadLine() ?? string.Empty;
+            if (!int.TryParse(UserOutputString, out UserOutput))
             {
-                Console.WriteLine("Please type in a valid number");
-                Extras.PressKey();
-                Error = true;
+                if (Extras.isReturn(UserOutputString))
+                {
+                    Console.WriteLine("Exiting Program...");
+                    Error = true;
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("Please type in a valid number");
+                    Extras.PressKey();
+                    Error = true;
+                }
             }
             switch (UserOutput)
             {
                 case 1:
-                    LoadedNetwork = CreateCLI.CreatingProcess() ?? throw new Exception("Loaded Network cannot be null");
+                    var CreationResult = CreateCLI.CreatingProcess();
+                    if(CreationResult.Value2 == returnString)
+                    {
+                        Console.WriteLine("Exiting Neural Network Creation...");
+                        Error = true;
+                    }
+                    else {
+                    LoadedNetwork = CreationResult.Value1 ?? throw new Exception("Loaded Network cannot be null");
                     currentnnName = SaveCLI.SaveNetworkToFile(LoadedNetwork, "new");
+                    }
                     break;
                 case 2:
                     var result = LoadCLI.LoadNeuralNetwork();
@@ -65,6 +84,11 @@ internal class Program
             Console.WriteLine("2. Let the Neural Network learn");
             if (!int.TryParse(Console.ReadLine(), out UserOutput))
             {
+                if (Extras.isReturn(UserOutput.ToString()))
+                {
+                    Console.WriteLine("This have to be implemented later..."); //Todo
+                    return;
+                }
                 Console.WriteLine("Please type in a valid number");
                 Error = true;
             }
