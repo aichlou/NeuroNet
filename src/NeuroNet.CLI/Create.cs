@@ -7,20 +7,31 @@ public class CreateCLI
 {
     public static TwoValues<List<List<Neuron>>, string?> CreatingProcess()
     {
-        MultipleValues<int> layerCountResult = LayerCount();
-        int layers = layerCountResult.Value;
-        if (layerCountResult.HasError)
+        bool Error = false;
+        int layers;
+        int[] networkData;
+        do
         {
-            return new TwoValues<List<List<Neuron>>, string?> 
+            Error = false;
+            MultipleValues<int> layerCountResult = LayerCount();
+            layers = layerCountResult.Value;
+            if (layerCountResult.HasError)
             {
-                Value1 = null,
-                Value2 = layerCountResult.ErrorMessage
-            };
-        }
+                return new TwoValues<List<List<Neuron>>, string?> 
+                {
+                    Value1 = null,
+                    Value2 = layerCountResult.ErrorMessage
+                };
+            }
 
 
-        int[] networkData = new int[layers];
-        NeuronCountForLayer(networkData);
+            networkData = new int[layers];
+            NeuronCountForLayer(networkData);
+            if (networkData[0] == 0) //Network Creation was exited with the Return-Keyword
+            {
+                Error = true;
+            }
+        } while (Error);
         /*for (int i = 0; i < layers; i++)
         {
             string layerType;
@@ -81,6 +92,7 @@ public class CreateCLI
                 }
             } while (Error);
         } */
+
         Console.WriteLine("Creating Neural Network...");
         List<List<Neuron>> network;
         try {
@@ -185,7 +197,14 @@ public class CreateCLI
             {
                 if(Extras.isReturn(UserOutput))
                 {
-                    networkData[layer -1] = 0; //Todo: Check if zero
+                    if (layer != 0) {
+                        networkData[layer -1] = 0;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Exiting Neural Network Creation...");
+                        return networkData; //TODO HIER MEITER MACHEN
+                    }
                     Console.WriteLine("Go Back One Layer...");
                     //Todo: Print last network state
                     NeuronCountForLayer(networkData);
