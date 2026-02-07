@@ -46,7 +46,7 @@ internal class Program
                     }
                     else {
                     LoadedNetwork = CreationResult.Value1 ?? throw new Exception("Loaded Network cannot be null");
-                    currentnnName = SaveCLI.SaveNetworkToFile(LoadedNetwork, "new");
+                    currentnnName = SaveCLI.SaveNetworkToFile(LoadedNetwork, "new"); //Todo: add return Keyword implementation
                     }
                     break;
                 case 2:

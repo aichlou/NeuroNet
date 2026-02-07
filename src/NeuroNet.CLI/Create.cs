@@ -92,7 +92,6 @@ public class CreateCLI
                 }
             } while (Error);
         } */
-
         Console.WriteLine("Creating Neural Network...");
         List<List<Neuron>> network;
         try {
@@ -104,7 +103,7 @@ public class CreateCLI
             //Todo: Error handling with GitHub Issue Reporting
             Console.WriteLine("Please try again.");
             Console.WriteLine();
-            return CreatingProcess();
+            return CreatingProcess(); //When the user types the return Keyword in this Process the program will return to the main menu, but is that what the program should do?
         }
         Console.WriteLine("Neural Network created with " + layers + " layers.");
         return new TwoValues<List<List<Neuron>>, string?> 
@@ -156,7 +155,6 @@ public class CreateCLI
             ErrorMessage = null
         };
     }
-
     public static int[] NeuronCountForLayer(int[] networkData)
     {
         int layer = 0;
