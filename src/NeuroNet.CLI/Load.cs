@@ -36,8 +36,39 @@ class LoadCLI {
         }
         Console.WriteLine("Please type in the name of the Neural Network you would like to load:");
         string? nnName = Console.ReadLine();
+        if ( Extras.isReturn(nnName))
+        {
+            Console.WriteLine("Exiting Load Process...");
+            return new MultipleValues<TwoValues<List<List<Neuron>>, string?>>
+            {
+                Value = new TwoValues<List<List<Neuron>>, string?> { Value1 = null},
+                HasError = true,
+                ErrorMessage = "User exited load process."
+            };
+        }
         nnName = Load.NameOf(nnName);
-        string networkData = Load.ContentOf(nnName);
+        var contentResult = Load.ContentOf(nnName);
+        if (contentResult.HasError)
+        {            
+            Console.WriteLine(contentResult.ErrorMessage);
+            return new MultipleValues<TwoValues<List<List<Neuron>>, string?>>
+            {
+                Value = null,
+                HasError = true,
+                ErrorMessage = contentResult.ErrorMessage
+            };
+        }
+        string networkData = contentResult.Value ?? string.Empty;
+        if (string.IsNullOrEmpty(networkData))
+        {
+            Console.WriteLine("Failed to load Neural Network. The file is empty or could not be read.");
+            return new MultipleValues<TwoValues<List<List<Neuron>>, string?>>
+            {
+                Value = new TwoValues<List<List<Neuron>>, string?> { Value1 = null},
+                HasError = true,
+                ErrorMessage = "Failed to load Neural Network. The file is empty or could not be read."
+            };
+        }
         if (string.IsNullOrEmpty(networkData))
         {
             Console.WriteLine("Failed to load Neural Network.");
