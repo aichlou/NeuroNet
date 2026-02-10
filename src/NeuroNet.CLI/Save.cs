@@ -23,7 +23,7 @@ class SaveCLI
                                 if(string.IsNullOrEmpty(nnName)) Console.WriteLine("Please name your Network Properly");
                                 else if (Extras.isReturn(nnName))
                                 {
-                                    Error = true; //HIER WEITER MACHEN
+                                    Error = true;
                                     nnName="Temp";
                                 }
                                 else if (nnName == "ReturnToMainMenu") 
@@ -61,8 +61,8 @@ class SaveCLI
                                 return SaveNetworkToFile(network, "new", currentnnName);
                             }
                         }
-                    Console.WriteLine("Neural Network not saved.");
-                    return "NoName";
+                        Console.WriteLine("Neural Network not saved.");
+                        return "NoName";
                     }
                 } while (Error);
                 break;

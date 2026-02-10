@@ -46,7 +46,7 @@ internal class Program
                     }
                     else {
                     LoadedNetwork = CreationResult.Value1 ?? throw new Exception("Loaded Network cannot be null");
-                    currentnnName = SaveCLI.SaveNetworkToFile(LoadedNetwork, "new"); //Todo: add return Keyword implementation
+                    currentnnName = SaveCLI.SaveNetworkToFile(LoadedNetwork, "new");
                     }
                     break;
                 case 2:
@@ -74,7 +74,7 @@ internal class Program
         if (LoadedNetwork is null) throw new InvalidOperationException("LoadedNetwork must not be null here");
 
         Extras.PressKey();
-        LoadedNetwork = EditCLI.RandomizeIfNeeded(LoadedNetwork, currentnnName);
+        LoadedNetwork = EditCLI.RandomizeIfNeeded(LoadedNetwork, currentnnName); //weitermachen
         UserOutput = 0;
         do {
             Error = false;
