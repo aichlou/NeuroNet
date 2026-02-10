@@ -13,7 +13,7 @@ public class Load {
 
     static readonly string baseDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
     static readonly string appDataPath = Path.Combine(baseDataPath, "NeuroNet");
-    
+
     public static string[]? ListSavedNetworks(string? DirectoryPath = null)
     {
         if(DirectoryPath == null) DirectoryPath = appDataPath;
@@ -76,11 +76,10 @@ public class Load {
         try
         {
             var file = JsonSerializer.Deserialize<FileDto>(networkData) ?? throw new Exception("Deserialized file is null.");
-            networkDto = file.Network;
+            networkDto = file.Network; //Add more Parameters for Metadata
         }
         catch (Exception)
         {
-            Console.WriteLine("An Error occurred while deserializing the Neural Network.");
             return new List<List<Neuron>>{};
         }
         List<List<Neuron>>? network = networkDto?.Select(layer => layer.Select(neuronDto => neuronDto.ToNeuron()).ToList()).ToList();
