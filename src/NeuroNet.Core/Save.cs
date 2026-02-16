@@ -17,17 +17,13 @@ public class Save
         File.WriteAllText(filePath, jsonData);
     }
 
-    public static string SaveNetwork(string nnName, List<List<Neuron>> network, string status, Action<string>? Message = null, Func<string>? readInput = null)
+    public static string SaveNetwork(string nnName, List<List<Neuron>> network, string status)
     {
         if (status == "new" && File.Exists(Path.Combine(appDataPath, nnName + ".nn")))
         {
-            Message?.Invoke("Neural Network already exists.");
             return "already existing";
         }
-        if (status == "overwrite" && !File.Exists(Path.Combine(appDataPath, nnName + ".nn")))
-        {
-            Message?.Invoke("Neural Network does not exist. Saving as new Neural Network: " + nnName);
-        }
+        if (status == "overwrite" && !File.Exists(Path.Combine(appDataPath, nnName + ".nn"))) {} //Create new file
         List<List<NeuronDto>> dtoNetwork = new List<List<NeuronDto>>();
         foreach(var layer in network)
         {
@@ -92,7 +88,7 @@ public class Save
             Network = dtoNetwork
         };
         string combinedJson = JsonSerializer.Serialize(combinedData);
-        SaveNetworkToFile(nnName, combinedJson, Message);
+        SaveNetworkToFile(nnName, combinedJson);
         return "done";
     }
 }

@@ -1,6 +1,6 @@
 namespace NeuroNet.Core;
 
-public static class GitHubReportIssue
+/* public static class GitHubReportIssue
 {
     public static void ReportToGitHub(string title, string errorMessage, string stackTrace, string sidenote, bool v, Action<string>? Message = null, Func<string>? readInput = null)
     {
@@ -28,7 +28,7 @@ public static class GitHubReportIssue
             }
         }
     }
-}
+} */
 
 public class MultipleValues<T1>
 {

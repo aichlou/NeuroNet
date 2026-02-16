@@ -65,6 +65,10 @@ class SaveCLI
                 }
                 else
                 {
+                    if (Extras.isReturn(saveResponse))
+                    {
+                        Console.WriteLine("This isn't implemented yet");
+                    }
                     Console.WriteLine("Neural Network not saved.");
                     return "NoName";
                 }
@@ -73,13 +77,14 @@ class SaveCLI
                 Console.WriteLine("Something went wrong. Please report an Issue on GitHub and restart the program");
                 throw new Exception();
         }
-        string Message = Save.SaveNetwork(nnName, network, status, Console.WriteLine, () => Console.ReadLine() ?? string.Empty);
+        string Message = Save.SaveNetwork(nnName, network, status);
         switch(Message)
         {
             case "done":
                 Console.WriteLine("Neural Network successfully saved as " + nnName);
                 break;
             case "already existing":
+                Console.WriteLine("Neural Network already exists.");
                 break;
             default:
                 Console.WriteLine("An error occured. Please Report the Issue on GitHub.");
