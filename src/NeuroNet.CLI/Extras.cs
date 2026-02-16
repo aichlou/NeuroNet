@@ -17,7 +17,7 @@ public class Extras
         Console.WriteLine();
 
     }
-    public static bool isReturn(string? input)
+    public static bool IsReturn(string? input)
     {
         if (input == null) return false;
         return input.Trim().ToLower() == Program.returnString;

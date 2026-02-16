@@ -23,7 +23,7 @@ public class Save
         {
             return "already existing";
         }
-        if (status == "overwrite" && !File.Exists(Path.Combine(appDataPath, nnName + ".nn"))) {} //Create new file
+        //if (status == "overwrite" && !File.Exists(Path.Combine(appDataPath, nnName + ".nn"))) {} //Create new file
         List<List<NeuronDto>> dtoNetwork = new List<List<NeuronDto>>();
         foreach(var layer in network)
         {

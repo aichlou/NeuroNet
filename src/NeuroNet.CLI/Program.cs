@@ -23,7 +23,7 @@ internal class Program
             string UserOutputString = Console.ReadLine() ?? string.Empty;
             if (!int.TryParse(UserOutputString, out UserOutput))
             {
-                if (Extras.isReturn(UserOutputString))
+                if (Extras.IsReturn(UserOutputString))
                 {
                     Console.WriteLine("Exiting Program...");
                     Error = true;
@@ -58,7 +58,7 @@ internal class Program
                         else {
                             LoadedNetwork = CreationResult.Value1 ?? throw new Exception("Loaded Network cannot be null");
                             currentnnName = SaveCLI.SaveNetworkToFile(LoadedNetwork, "new");
-                            if (currentnnName == "Return") repeat = true;
+                            if (currentnnName.ToLower() == returnString.ToLower()) repeat = true;
                         }
                     }
                     while(repeat);
@@ -96,9 +96,10 @@ internal class Program
             Console.WriteLine("What do you want to do?");
             Console.WriteLine("1. Run the Neural Network");
             Console.WriteLine("2. Let the Neural Network learn");
-            if (!int.TryParse(Console.ReadLine(), out UserOutput))
+            string UserOutputString = Console.ReadLine() ?? string.Empty;
+            if (!int.TryParse(UserOutputString, out UserOutput))
             {
-                if (Extras.isReturn(UserOutput.ToString()))
+                if (Extras.IsReturn(UserOutputString))
                 {
                     Console.WriteLine("This have to be implemented later..."); //Todo
                     return;

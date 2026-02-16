@@ -18,7 +18,6 @@ public class Run
         double[,] outputs = new double[network.Count(), maxNeuronsInLayer];
         for (int i = 0; i < network.Count; i++)
         {
-            double[] output = new double[network[i].Count()];
             for (int j = 0; j < network[i].Count; j++)
             {
                 if (i == 0)

@@ -37,7 +37,7 @@ public class Load {
         return output;
     }
 
-    public static MultipleValues<string> ContentOf(string? nnName, Action<string>? Message = null)
+    public static MultipleValues<string> ContentOf(string nnName)
     {
         string filePath = Path.Combine(appDataPath, nnName + ".nn");
         if (File.Exists(filePath))
@@ -55,7 +55,7 @@ public class Load {
                 {
                     Value = string.Empty,
                     HasError = true,
-                    ErrorMessage = "Failed to read Neural Network file. Exeption: " + e.Message
+                    ErrorMessage = "Failed to read Neural Network file. Exception: " + e.Message
                 };
             }
         }

@@ -7,7 +7,7 @@ namespace NeuroNet.CLI;
 
 public class CreateCLI
 {
-    public static TwoValues<List<List<Neuron>>, string?> CreatingProcess(TwoValues<List<List<Neuron>>, string?>? previousResult = null)
+    public static TwoValues<List<List<Neuron>>, string?> CreatingProcess(TwoValues<List<List<Neuron>>, string?>? previousResult = null, int retryCount = 0)
     {
         bool Error = false;
         int layers = 0;
@@ -17,7 +17,7 @@ public class CreateCLI
             Error = false;
             if (previousResult != null) //There is a prevous result
             {
-                if (previousResult.Value1!.Count != 0)
+                if (previousResult.Value1 != null  && previousResult.Value1.Count != 0)
                 {
                     layers = previousResult.Value1.Count;
                 }
@@ -56,8 +56,16 @@ public class CreateCLI
             //Todo: Error handling with GitHub Issue Reporting
             Console.WriteLine("Please try again.");
             Console.WriteLine();
-            return CreatingProcess(); //When the user types the return Keyword in this Process the program will return to the main menu, but is that what the program should do?
-        }
+            if (retryCount >= 3)
+            {
+                return new TwoValues<List<List<Neuron>>, string?>
+                {
+                    Value1 = null,
+                    Value2 = "Maximum retry attempts reached"
+                };
+            }
+            return CreatingProcess(null, retryCount + 1);
+        } //When the user types the return Keyword in this Process the program will return to the main menu, but is that what the program should do?
         Console.WriteLine("Neural Network created with " + layers + " layers.");
         return new TwoValues<List<List<Neuron>>, string?> 
         {
@@ -78,7 +86,7 @@ public class CreateCLI
             layers = int.TryParse(UserOutput, out int parsedLayers) ? parsedLayers : 0;
             if (layers == 0)
             {
-                if(Extras.isReturn(UserOutput))
+                if(Extras.IsReturn(UserOutput))
                 {
                     Console.WriteLine("Exiting Neural Network Creation...");
                     var result = new MultipleValues<int>
@@ -146,7 +154,7 @@ public class CreateCLI
             int neuronCount = int.TryParse(UserOutput, out int parsedNeuronCount) ? parsedNeuronCount : 0;
             if(neuronCount <= 0)
             {
-                if(Extras.isReturn(UserOutput))
+                if(Extras.IsReturn(UserOutput))
                 {
                     if (layer != 0) {
                         networkData[layer -1] = 0;
@@ -176,11 +184,11 @@ public class CreateCLI
             }
             else if(neuronCount > 100000)
             {
-                Console.WriteLine("The maximum number of neurons per layer is 100000. Defaulting to 1000000? (y/n)");
+                Console.WriteLine("The maximum number of neurons per layer is 100000. Default to 100000? (y/n)");
                 string response = Console.ReadLine() ?? string.Empty;
                 if(response.ToLower() == "y") {
                     Console.WriteLine("Confirmed");
-                    neuronCount = 1; 
+                    neuronCount = 100000; 
                 }
                 else {
                     Console.WriteLine("Not Confirmed");

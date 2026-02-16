@@ -12,6 +12,7 @@ class SaveCLI
             case "new":
                 bool Error = false;
                 do {
+                    Error = false;
                     Console.WriteLine("Do you want to save this Neural Network to a file? (y/n)");
                     saveResponse = Console.ReadLine() ?? string.Empty;
                     if(saveResponse.ToLower() == "y") {
@@ -21,14 +22,14 @@ class SaveCLI
                             {
                                 nnName = Console.ReadLine()!;
                                 if(string.IsNullOrEmpty(nnName)) Console.WriteLine("Please name your Network Properly");
-                                else if (Extras.isReturn(nnName))
+                                else if (Extras.IsReturn(nnName))
                                 {
                                     Error = true;
                                     nnName="Temp";
                                 }
-                                else if (nnName == "Return") 
+                                else if (nnName == Program.returnString) 
                                 {
-                                    Console.WriteLine("The name 'ReturnToMainMenu' is reserved. Please choose another name.");
+                                    Console.WriteLine($"The name '{Program.returnString}' is reserved. Please choose another name.");
                                     nnName = ""; //Will cause the loop to continue and ask for a new name
                                 }
                             }
@@ -47,10 +48,10 @@ class SaveCLI
                     }
                     else
                     {
-                        if(Extras.isReturn(saveResponse))
+                        if(Extras.IsReturn(saveResponse))
                         {
                             Console.WriteLine("Exiting Save Process...");
-                            return "Return";
+                            return Program.returnString;
                         }
                         Console.WriteLine("Neural Network not saved.");
                         return "NoName";
@@ -65,9 +66,9 @@ class SaveCLI
                 }
                 else
                 {
-                    if (Extras.isReturn(saveResponse))
+                    if (Extras.IsReturn(saveResponse))
                     {
-                        Console.WriteLine("This isn't implemented yet");
+                        Console.WriteLine("This isn't implemented yet"); //TODO: Implement this
                     }
                     Console.WriteLine("Neural Network not saved.");
                     return "NoName";
@@ -87,7 +88,7 @@ class SaveCLI
                 Console.WriteLine("Neural Network already exists.");
                 break;
             default:
-                Console.WriteLine("An error occured. Please Report the Issue on GitHub.");
+                Console.WriteLine("An error occurred. Please report the issue on GitHub.");
                 break;
         }
         return nnName;
