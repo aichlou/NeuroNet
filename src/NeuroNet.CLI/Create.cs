@@ -22,6 +22,7 @@ public class CreateCLI
                     layers = previousResult.Value1.Count;
                 }
                 networkData = Create.NeuronClusterToArray(previousResult.Value1!);
+                networkData[networkData.Count() - 1] = 0;
                 NeuronCountForLayer(networkData); //UFBASSE: Noch ändern: Hier sollte dette vom input genommen werden statdessen
             }
             else {

@@ -49,17 +49,8 @@ class SaveCLI
                     {
                         if(Extras.isReturn(saveResponse))
                         {
-                            Console.WriteLine("We're sorry. You cannot return to the Last Layer Network Creeation Step, because the network was created fully.");
-                            Console.WriteLine("Do you want to return to the Main Menu? (y/n)");
-                            string returnResponse = Console.ReadLine() ?? string.Empty;
-                            if(returnResponse.ToLower() == "y")
-                            {
-                                return "Return";
-                            }
-                            else
-                            {
-                                return SaveNetworkToFile(network, "new", currentnnName); //Wenn innerhalb der Funktion return eingegeben wird dann krachts auch
-                            }
+                            Console.WriteLine("Exiting Save Process...");
+                            return "Return";
                         }
                         Console.WriteLine("Neural Network not saved.");
                         return "NoName";
@@ -92,7 +83,6 @@ class SaveCLI
                 break;
             default:
                 Console.WriteLine("An error occured. Please Report the Issue on GitHub.");
-                
                 break;
         }
         return nnName;
