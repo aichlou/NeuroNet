@@ -11,6 +11,7 @@ internal class Program
         bool Error;
         List<List<Neuron>>? LoadedNetwork = null;
         string currentnnName = "MyNeuralNetwork";
+        TwoValues<List<List<Neuron>>, string?> CreationResult = default!;
         do
         {
             Error = false;
@@ -38,16 +39,29 @@ internal class Program
             switch (UserOutput)
             {
                 case 1:
-                    var CreationResult = CreateCLI.CreatingProcess();
-                    if(CreationResult.Value2 == returnString)
-                    {
-                        Console.WriteLine("Exiting Neural Network Creation...");
-                        Error = true;
+                    bool repeat = false;
+                    //TwoValues<List<List<Neuron>>, string?> CreationResult = TwoValues<List<List<Neuron>>, string?>.Default;
+                    do {
+                        if (repeat)
+                        {
+                            CreationResult = CreateCLI.CreatingProcess(CreationResult);
+                        }
+                        else {
+                            CreationResult = CreateCLI.CreatingProcess();
+                        }
+                        repeat = false;
+                        if (CreationResult.Value2 == returnString)
+                        {
+                            Console.WriteLine("Exiting Neural Network Creation...");
+                            Error = true;
+                        }
+                        else {
+                            LoadedNetwork = CreationResult.Value1 ?? throw new Exception("Loaded Network cannot be null");
+                            currentnnName = SaveCLI.SaveNetworkToFile(LoadedNetwork, "new");
+                            if (currentnnName == "Return") repeat = true;
+                        }
                     }
-                    else {
-                    LoadedNetwork = CreationResult.Value1 ?? throw new Exception("Loaded Network cannot be null");
-                    currentnnName = SaveCLI.SaveNetworkToFile(LoadedNetwork, "new");
-                    }
+                    while(repeat);
                     break;
                 case 2:
                     var result = LoadCLI.LoadNeuralNetwork();

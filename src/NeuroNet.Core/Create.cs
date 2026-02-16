@@ -25,4 +25,14 @@ public class Create {
         }
         return network;
     }
+    public static int[] NeuronClusterToArray(List<List<Neuron>> network)
+    {
+        int[] networkData = new int[network.Count + 1];
+        networkData[0] = network[0][0].weights.Length;
+        for (int i = 0; i < network.Count; i++)
+        {
+            networkData[i + 1] = network[i].Count;
+        }
+        return networkData;
+    }
 }

@@ -1,3 +1,5 @@
+using System.Data;
+using System.IO.Compression;
 using System.Net.NetworkInformation;
 using NeuroNet.Core;
 
@@ -5,93 +7,43 @@ namespace NeuroNet.CLI;
 
 public class CreateCLI
 {
-    public static TwoValues<List<List<Neuron>>, string?> CreatingProcess()
+    public static TwoValues<List<List<Neuron>>, string?> CreatingProcess(TwoValues<List<List<Neuron>>, string?>? previousResult = null)
     {
         bool Error = false;
-        int layers;
-        int[] networkData;
+        int layers = 0;
+        int[] networkData = new int[0];
         do
         {
             Error = false;
-            MultipleValues<int> layerCountResult = LayerCount();
-            layers = layerCountResult.Value;
-            if (layerCountResult.HasError)
+            if (previousResult != null) //There is a prevous result
             {
-                return new TwoValues<List<List<Neuron>>, string?> 
+                if (previousResult.Value1!.Count != 0)
                 {
-                    Value1 = null,
-                    Value2 = layerCountResult.ErrorMessage
-                };
+                    layers = previousResult.Value1.Count;
+                }
+                networkData = Create.NeuronClusterToArray(previousResult.Value1!);
+                NeuronCountForLayer(networkData); //UFBASSE: Noch ändern: Hier sollte dette vom input genommen werden statdessen
             }
-
-
-            networkData = new int[layers];
-            NeuronCountForLayer(networkData);
+            else {
+                MultipleValues<int> layerCountResult = LayerCount();
+                layers = layerCountResult.Value;
+                if (layerCountResult.HasError)
+                {
+                    return new TwoValues<List<List<Neuron>>, string?> 
+                    {
+                        Value1 = null,
+                        Value2 = layerCountResult.ErrorMessage
+                    };
+                }
+                networkData = new int[layers];
+                NeuronCountForLayer(networkData);
+            }
             if (networkData[0] == 0) //Network Creation was exited with the Return-Keyword
             {
                 Error = true;
             }
         } while (Error);
-        /*for (int i = 0; i < layers; i++)
-        {
-            string layerType;
-            if (i == 0)
-            {
-                layerType = " (Input Layer)";
-            }
-            else if (i == layers - 1)
-            {
-                layerType = " (Output Layer)";
-            }
-            else
-            {
-                layerType = " (Hidden Layer)";
-            }
-
-            Console.WriteLine("How many neurons would you like in layer " + (i + 1) + layerType + "?");
-            do {
-                Error = false;
-                string UserOutput = Console.ReadLine() ?? string.Empty;
-                int neuronCount = int.TryParse(UserOutput, out int parsedNeuronCount) ? parsedNeuronCount : 0;
-                if(neuronCount <= 0)
-                {
-                    if(Extras.isReturn(UserOutput))
-                    {
-                        
-                    }
-                    Console.WriteLine("Invalid neuron count, defaulting to 1 neuron? (y/n)");
-
-                    string response = Console.ReadLine() ?? string.Empty;
-                    if(response.ToLower() == "y") {
-                        Console.WriteLine("Confirmed");
-                        neuronCount = 1; 
-                    }
-                    else {
-                        Console.WriteLine("Not Confirmed");
-                        Console.WriteLine("Please enter a valid number for the neurons in layer " + (i + 1) );
-                        Error = true;
-                    }
-                }
-                else if(neuronCount > 100000)
-                {
-                    Console.WriteLine("The maximum number of neurons per layer is 100000. Defaulting to 1000000? (y/n)");
-                    string response = Console.ReadLine() ?? string.Empty;
-                    if(response.ToLower() == "y") {
-                        Console.WriteLine("Confirmed");
-                        neuronCount = 1; 
-                    }
-                    else {
-                        Console.WriteLine("Not Confirmed");
-                        Console.WriteLine("Please enter a valid number for the neurons in layer " + (i + 1) );
-                        Error = true;
-                    }
-                }
-                else
-                {
-                    networkData[i] = neuronCount;
-                }
-            } while (Error);
-        } */
+        
         Console.WriteLine("Creating Neural Network...");
         List<List<Neuron>> network;
         try {

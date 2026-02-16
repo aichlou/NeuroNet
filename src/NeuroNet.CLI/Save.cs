@@ -26,7 +26,7 @@ class SaveCLI
                                     Error = true;
                                     nnName="Temp";
                                 }
-                                else if (nnName == "ReturnToMainMenu") 
+                                else if (nnName == "Return") 
                                 {
                                     Console.WriteLine("The name 'ReturnToMainMenu' is reserved. Please choose another name.");
                                     nnName = ""; //Will cause the loop to continue and ask for a new name
@@ -54,11 +54,11 @@ class SaveCLI
                             string returnResponse = Console.ReadLine() ?? string.Empty;
                             if(returnResponse.ToLower() == "y")
                             {
-                                return "ReturnToMainMenu";
+                                return "Return";
                             }
                             else
                             {
-                                return SaveNetworkToFile(network, "new", currentnnName);
+                                return SaveNetworkToFile(network, "new", currentnnName); //Wenn innerhalb der Funktion return eingegeben wird dann krachts auch
                             }
                         }
                         Console.WriteLine("Neural Network not saved.");
