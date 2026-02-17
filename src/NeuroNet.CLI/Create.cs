@@ -23,7 +23,7 @@ public class CreateCLI
                 }
                 networkData = Create.NeuronClusterToArray(previousResult.Value1!);
                 if (!again) networkData[networkData.Count() - 1] = 0;
-                NeuronCountForLayer(networkData); //UFBASSE: Noch ändern: Hier sollte dette vom input genommen werden statdessen. Glaub ich aber nicht - War jelojen
+                again = false;
             }
             else {
                 MultipleValues<int> layerCountResult = LayerCount();
@@ -37,8 +37,8 @@ public class CreateCLI
                     };
                 }
                 networkData = new int[layers];
-                NeuronCountForLayer(networkData);
             }
+            NeuronCountForLayer(networkData);
             if (networkData[0] == 0) //Network Creation was exited with the Return-Keyword
             {
                 Error = true;
@@ -169,18 +169,8 @@ public class CreateCLI
                     NeuronCountForLayer(networkData);
                     return networkData;
                 }
-                Console.WriteLine("Invalid neuron count, defaulting to 1 neuron? (y/n)");
-
-                string response = Console.ReadLine() ?? string.Empty;
-                if(response.ToLower() == "y") {
-                    Console.WriteLine("Confirmed");
-                    neuronCount = 1; 
-                }
-                else {
-                    Console.WriteLine("Not Confirmed");
-                    Console.WriteLine("Please enter a valid number for the neurons in layer " + (layer + 1) );
-                    Error = true;
-                }
+                Console.WriteLine("Please enter a valid number for the neurons in layer " + (layer + 1) );
+                Error = true;
             }
             else if(neuronCount > 100000)
             {

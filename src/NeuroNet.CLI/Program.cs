@@ -64,13 +64,7 @@ internal class Program
                         if (again) repeat = true;
                         else repeat = false;
                         do {
-                            if (repeat)
-                            {
-                                CreationResult = CreateCLI.CreatingProcess(CreationResult);
-                            }
-                            else {
-                                CreationResult = CreateCLI.CreatingProcess();
-                            }
+                            CreationResult = CreateCLI.CreatingProcess(CreationResult, again);
                             repeat = false;
                             if (CreationResult.Value2 == returnString)
                             {
@@ -79,6 +73,19 @@ internal class Program
                             }
                             else {
                                 LoadedNetwork = CreationResult.Value1 ?? throw new Exception("Loaded Network cannot be null");
+                                if (again)
+                                {
+                                    Console.WriteLine("Deleting old Network & Creating new Network...");
+                                    if (SaveCLI.DeleteFile(currentnnName)) Extras.PressKey();
+                                    else //Return Keyword was typed in
+                                    {
+                                        Console.WriteLine("Why do you do that?");
+                                        Console.WriteLine("Do you think I have no Life");
+                                        Console.WriteLine("I have feelings too, you know...");
+                                        Console.WriteLine("Please just type in the same name and everything will be fine...");
+                                        Console.WriteLine();
+                                    }
+                                }
                                 currentnnName = SaveCLI.SaveNetworkToFile(LoadedNetwork, "new");
                                 if (currentnnName.ToLower() == returnString.ToLower()) repeat = true;
                             }

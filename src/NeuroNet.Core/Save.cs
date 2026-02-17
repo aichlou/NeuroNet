@@ -91,4 +91,18 @@ public class Save
         SaveNetworkToFile(nnName, combinedJson);
         return "done";
     }
+
+    public static string DeleteFile(string nnName)
+    {
+        string filePath = Path.Combine(appDataPath, nnName + ".nn");
+        if (File.Exists(filePath))
+        {
+            File.Delete(filePath);
+            return "done";
+        }
+        else
+        {
+            return "file not found";
+        }
+    }
 }

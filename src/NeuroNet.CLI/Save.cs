@@ -94,4 +94,33 @@ class SaveCLI
         }
         return nnName;
     }
+
+    public static bool DeleteFile(string nnName)
+    {
+        Console.WriteLine("Are you sure you want to delete the old Neural Network " + nnName + "? (y/n)");
+        string UserResponse = Console.ReadLine() ?? string.Empty;
+        if (UserResponse.ToLower() != "y") {
+            if (Extras.IsReturn(UserResponse))
+            {
+                Console.WriteLine("Exiting Delete Process...");
+                return false;
+            }
+            Console.WriteLine("Neural Network not deleted.");
+            return true;
+        }
+        string Message = Save.DeleteFile(nnName);
+        switch(Message)
+        {
+            case "done":
+                Console.WriteLine("Neural Network successfully deleted.");
+                break;
+            case "file not found":
+                Console.WriteLine("Neural Network does not exist.");
+                break;
+            default:
+                Console.WriteLine("An error occurred. Please report the issue on GitHub.");
+                break;
+        }
+        return true;
+    }
 }
