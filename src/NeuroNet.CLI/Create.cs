@@ -7,7 +7,7 @@ namespace NeuroNet.CLI;
 
 public class CreateCLI
 {
-    public static TwoValues<List<List<Neuron>>, string?> CreatingProcess(TwoValues<List<List<Neuron>>, string?>? previousResult = null, int retryCount = 0)
+    public static TwoValues<List<List<Neuron>>, string?> CreatingProcess(TwoValues<List<List<Neuron>>, string?>? previousResult = null, bool again = false, int retryCount = 0)
     {
         bool Error = false;
         int layers = 0;
@@ -22,8 +22,8 @@ public class CreateCLI
                     layers = previousResult.Value1.Count;
                 }
                 networkData = Create.NeuronClusterToArray(previousResult.Value1!);
-                networkData[networkData.Count() - 1] = 0;
-                NeuronCountForLayer(networkData); //UFBASSE: Noch ändern: Hier sollte dette vom input genommen werden statdessen
+                if (!again) networkData[networkData.Count() - 1] = 0;
+                NeuronCountForLayer(networkData); //UFBASSE: Noch ändern: Hier sollte dette vom input genommen werden statdessen. Glaub ich aber nicht - War jelojen
             }
             else {
                 MultipleValues<int> layerCountResult = LayerCount();
@@ -64,7 +64,7 @@ public class CreateCLI
                     Value2 = "Maximum retry attempts reached"
                 };
             }
-            return CreatingProcess(null, retryCount + 1);
+            return CreatingProcess(null, again, retryCount + 1);
         } //When the user types the return Keyword in this Process the program will return to the main menu, but is that what the program should do?
         Console.WriteLine("Neural Network created with " + layers + " layers.");
         return new TwoValues<List<List<Neuron>>, string?> 

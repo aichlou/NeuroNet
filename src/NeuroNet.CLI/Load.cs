@@ -69,16 +69,6 @@ class LoadCLI {
                 ErrorMessage = "Failed to load Neural Network. The file is empty or could not be read."
             };
         }
-        if (string.IsNullOrEmpty(networkData))
-        {
-            Console.WriteLine("Failed to load Neural Network.");
-            return new MultipleValues<TwoValues<List<List<Neuron>>, string?>>
-            {
-                Value = new TwoValues<List<List<Neuron>>, string?> { Value1 = null},
-                HasError = true,
-                ErrorMessage = "Failed to load Neural Network."
-            };
-        }
         List<List<Neuron>>? network = Load.JsonToList(networkData);
 
         if (network == null)

@@ -11,7 +11,6 @@ class EditCLI
             network = Edit.RandomizeWeights(network);
             Console.WriteLine("The weights were randomized since they were all null");
             SaveCLI.SaveNetworkToFileY(network, "overwrite", currentnnName);
-            Console.WriteLine("The changes were saved to the file");
         }
         return network;
     }

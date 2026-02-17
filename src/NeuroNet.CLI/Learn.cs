@@ -33,6 +33,11 @@ public class Learn
                 Extras.PressKey();
                 Error = true;
             }
+            else if (Extras.IsReturn(path))
+            {
+                Console.WriteLine("Exiting Learning Process...");
+                Error = true;
+            }
             else if (!Directory.Exists(path)) {
                 Console.WriteLine("You need to insert a existing path.");
                 Extras.PressKey();

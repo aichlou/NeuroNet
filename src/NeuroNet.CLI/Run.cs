@@ -26,14 +26,23 @@ public class RunCLI
                 string? inputLine = Console.ReadLine();
                 if (!string.IsNullOrEmpty(inputLine))
                 {
+                    if (Extras.IsReturn(inputLine))
+                    {
+                        Console.WriteLine("Exiting Run Process...");
+                        return new MultipleValues<double[]> 
+                        {
+                            Value = new double[0],
+                            HasError = true,
+                            ErrorMessage = "User exited run process."
+                        };
+                    }
                     try {
                         inputData = inputLine.Split(',').Select(s => double.Parse(s.Trim())).ToList();
                         if(inputData.Count != InputLength)
                         {
                             Console.WriteLine($"Invalid number of inputs. Expected {InputLength} values.");
                             Console.WriteLine($"You entered {inputData.Count} values.");
-                            Console.Write("Press any key to continue...");
-                            Console.ReadKey();
+                            Extras.PressKey();
                             Error = true;
                         }
                         /*else
@@ -48,8 +57,7 @@ public class RunCLI
                     catch (FormatException)
                     {
                         Console.WriteLine("Invalid input format. Please ensure you enter numbers separated by commas.");
-                        Console.Write("Press any key to continue...");
-                        Console.ReadKey();
+                        Extras.PressKey();
                         Error = true;
                     }
                 }
