@@ -10,11 +10,11 @@ internal class Program
         bool again = false;
         string? Way = null;
         TwoValues<List<List<Neuron>>, string?> CreationResult = default!;
+        string currentnnName = "MyNeuralNetwork";
         do {
             int UserOutput;
             bool Error;
             List<List<Neuron>>? LoadedNetwork = null;
-            string currentnnName = "MyNeuralNetwork";
             do
             {
                 Error = false;
@@ -24,6 +24,7 @@ internal class Program
                     Console.WriteLine("What would you like to do?");
                     Console.WriteLine("1. Create a NeuralNetwork");
                     Console.WriteLine("2. Load a NeuralNetwork");
+                    Console.WriteLine("3. Exit");
                     string UserOutputString = Console.ReadLine() ?? string.Empty;
                     if (!int.TryParse(UserOutputString, out UserOutput))
                     {
@@ -87,6 +88,7 @@ internal class Program
                                     }
                                 }
                                 currentnnName = SaveCLI.SaveNetworkToFile(LoadedNetwork, "new");
+                                again = false;
                                 if (currentnnName.ToLower() == returnString.ToLower()) repeat = true;
                             }
                         }
@@ -106,6 +108,9 @@ internal class Program
                             currentnnName = result.Value.Value2 ?? throw new Exception("Network name cannot be null");
                         }
                         break;
+                    case 3:
+                        Console.WriteLine("Exiting Program...");
+                        return;
                     default:
                         if(!Error) {
                             Console.WriteLine("Please type in one of the shown options");
@@ -160,7 +165,7 @@ internal class Program
                             Console.WriteLine("This feature is in the working process...");
                             Console.WriteLine("CAREFUL: This feature isn't working yet");
                             try {
-                                Learn.UserDialoge(LoadedNetwork);
+                                Error = Learn.UserDialoge(LoadedNetwork);
                             }
                             catch (Exception e)
                             {
