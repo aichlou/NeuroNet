@@ -88,7 +88,7 @@ internal class Program
         if (LoadedNetwork is null) throw new InvalidOperationException("LoadedNetwork must not be null here");
 
         Extras.PressKey();
-        LoadedNetwork = EditCLI.RandomizeIfNeeded(LoadedNetwork, currentnnName); //weitermachen
+        LoadedNetwork = EditCLI.RandomizeIfNeeded(LoadedNetwork, currentnnName);
         UserOutput = 0;
         do {
             Error = false;

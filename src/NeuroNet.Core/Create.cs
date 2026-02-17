@@ -36,7 +36,7 @@ public class Create {
             }
             return networkData;
         }
-        catch()
+        catch(Exception)
         {
             return new int[0];
         }

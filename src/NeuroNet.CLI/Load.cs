@@ -36,7 +36,7 @@ class LoadCLI {
         }
         Console.WriteLine("Please type in the name of the Neural Network you would like to load:");
         string? nnName = Console.ReadLine();
-        if ( Extras.isReturn(nnName))
+        if ( Extras.IsReturn(nnName))
         {
             Console.WriteLine("Exiting Load Process...");
             return new MultipleValues<TwoValues<List<List<Neuron>>, string?>>
