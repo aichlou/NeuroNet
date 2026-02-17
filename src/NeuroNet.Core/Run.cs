@@ -12,12 +12,12 @@ public class Run
         if (network.Count == 0) throw new ArgumentException("Network cannot be empty.", nameof(network));
         if (network[0][0].GetWeights().Length != inputData.Count) throw new ArgumentException($"Input data count ({inputData.Count}) must match input layer neuron count ({network[0][0].GetWeights().Length}).");
            
+        int maxNeuronsInLayer = network.Max(layer => layer.Count);
         var lastLayer = network[network.Count - 1];
         double[] networkoutput = new double[lastLayer.Count];
-        double[,] outputs = new double[network.Count(), 10000];
+        double[,] outputs = new double[network.Count(), maxNeuronsInLayer];
         for (int i = 0; i < network.Count; i++)
         {
-            double[] output = new double[network[i].Count()];
             for (int j = 0; j < network[i].Count; j++)
             {
                 if (i == 0)

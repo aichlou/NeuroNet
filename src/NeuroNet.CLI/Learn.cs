@@ -6,7 +6,7 @@ namespace NeuroNet.CLI;
 
 public class Learn
 {
-    public static void UserDialoge(List<List<Neuron>> network)
+    public static bool UserDialoge(List<List<Neuron>> network)
     {
         network = network 
         ?? throw new ArgumentNullException(nameof(network));
@@ -32,6 +32,11 @@ public class Learn
                 Console.WriteLine();
                 Extras.PressKey();
                 Error = true;
+            }
+            else if (Extras.IsReturn(path))
+            {
+                Console.WriteLine("Exiting Learning Process...");
+                return true;
             }
             else if (!Directory.Exists(path)) {
                 Console.WriteLine("You need to insert a existing path.");
@@ -65,6 +70,7 @@ public class Learn
                     }
                 }
             }
-        } while (Error) ;
+        } while (Error);
+        return false;
     }
 }
