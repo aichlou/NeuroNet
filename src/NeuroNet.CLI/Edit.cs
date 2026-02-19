@@ -63,6 +63,10 @@ class EditCLI
                         Console.WriteLine("Weights randomized and saved to file");
                         break;
                     case 2:
+                        Console.WriteLine("Me (the developer) don't recommend to change the Weights here...");
+                        Console.WriteLine("I personally would wait until the v.0.5.0 - Graphical Update comes and edit the weights then...");
+                        Console.WriteLine("But I wish you good Luck");
+                        Console.WriteLine();
                         MultipleValues<List<List<Neuron>>> EditWeightsResult = EditCLI.EditWeightsManually(network);
                         if (EditWeightsResult.HasError)
                         {
@@ -142,6 +146,7 @@ class EditCLI
                 Console.WriteLine($"You selected Layer {layerNumber}");
                 bool NeuronError = false;
                 do {
+                    NeuronError = false;
                     Console.WriteLine($"This layer has {network[layerNumber - 1].Count} neurons.");
                     Console.WriteLine("Enter the neuron number of the weight you want to edit:");
                     string? neuronInput = Console.ReadLine();
@@ -160,11 +165,62 @@ class EditCLI
                     else
                     {
                         Neuron selectedNeuron = network[layerNumber - 1][neuronNumber - 1];
-                        double[] weights = selectedNeuron.GetWeights();
-                        Console.WriteLine($"Current weights: {string.Join(", ", weights.Select(w => w.ToString("F2")))}");
-                        Console.WriteLine("Which wight do you want to change?");
-                        string UserOutput = Console.ReadLine() ?? "";
-                        //Todo: Code further but Im unhappy with this Code
+                        bool WeightsError = false;
+                        do {
+                            WeightsError = false;
+                            double[] weights = selectedNeuron.GetWeights();
+                            Console.WriteLine($"Current weights: {string.Join(", ", weights.Select(w => w.ToString("F2")))}");
+                            Console.WriteLine("Which weight do you want to change? (Type in 'all' if you want to change all)");
+                            string UserOutput = Console.ReadLine() ?? "";
+                            if (!int.TryParse(UserOutput, out int Num))
+                            {
+                                if (Extras.IsReturn(UserOutput))
+                                {
+                                    Console.WriteLine("Redirecting to Neuron Choice...");
+                                    NeuronError = true;
+                                }
+                                else
+                                {
+                                    if (UserOutput.ToLower() == "all")
+                                    {
+                                        Console.WriteLine("Please type in the new weights seperated by commas");
+                                        string NewWeights = Console.ReadLine() ?? "";
+                                        if (NewWeights == "")
+                                        {
+                                            Console.WriteLine("Bro...Please type something in");
+                                            WeightsError = true;
+                                        }
+                                        else if (Extras.IsReturn(NewWeights))
+                                        {
+                                            Console.WriteLine("Returning to Neuron Choice...");
+                                            NeuronError = true;
+                                        }
+                                        else
+                                        {
+                                            string[] StringWeights = NewWeights.Split(',');
+
+                                            if (StringWeights.All(w => double.TryParse(w, out _)))
+                                            {
+                                                double[] doubleWeigths = StringWeights.Select(w => double.Parse(w)).ToArray();
+                                                if (doubleWeigths.Length == selectedNeuron.GetWeights().Length)
+                                                {
+                                                    selectedNeuron.SetWeights(doubleWeigths);
+                                                    Console.WriteLine("Succesfully changed Neurons Weights");
+                                                }
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine("Please give only valid weights (No Text)");
+                                            } //entry point to code further
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                
+                            }
+                        } while (WeightsError);
                     }
                 } while (NeuronError);
             }

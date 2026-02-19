@@ -52,6 +52,9 @@ public class Neuron
     {
         return this.weights;
     }
+    public void SetWeights(double[] input) {
+        this.weights = input;
+    }
     public NeuronDto ToDto()
     {
         return new NeuronDto
