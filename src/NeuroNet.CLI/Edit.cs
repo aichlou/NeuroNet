@@ -24,6 +24,7 @@ class EditCLI
     {
         bool Error = false;
         do {
+            Error = false;
             Console.WriteLine("Edit Neural Network");
             Console.WriteLine("What do you want to do?");
             Console.WriteLine("1. Randomize Weights");
@@ -85,17 +86,43 @@ class EditCLI
                         if (!Error)
                         {
                             SaveCLI.SaveNetworkToFileY(network, "overwrite", currentnnName);
-                            Console.WriteLine("Weights edited and saved to file");
                         } 
                         break;
                     case 3:
+                        Console.WriteLine("This isn't implemented yet");
+                        //Todo add Number of Layers or Neurons
                         break;
                     case 4:
+                        Console.WriteLine("This isn't implemented yet");
+                        //Todo: Change Name of the network
                         break;
                     default:
                         Console.WriteLine("Please insert one of the shown Options");
                         Error = true;
                         break;
+                }
+                if (!Error) {
+                    Console.WriteLine("Do you want to Edit further? (y/n)");
+                    string UserInupt = Console.ReadLine() ?? "";
+                    if (Extras.IsReturn(UserInupt))
+                    {
+                        //Todo: I dont want to do this
+                        Console.WriteLine("This isn't implemented yet so you will be redirected to the main menu...");
+                    }
+                    else if (UserInupt.ToLower() == "y")
+                    {
+                        //Console.WriteLine("Really? You want to stay in my shi**y menu?");
+                        Console.WriteLine("On the way to the Edit menu...");
+                        Error = true;
+                    }
+                    else if (UserInupt.ToLower() == "n")
+                    {
+                        Console.WriteLine("You will be redirected to the main menu...");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Okay... I guess you don't want to stay here...");
+                    }
                 }
             }
         } while (Error);
@@ -169,7 +196,7 @@ class EditCLI
                         do {
                             WeightsError = false;
                             double[] weights = selectedNeuron.GetWeights();
-                            Console.WriteLine($"Current weights: {string.Join(", ", weights.Select(w => w.ToString("F2")))}");
+                            Console.WriteLine($"Current weights: {string.Join(", ", weights.Select(w => w.ToString("F2")))}"); //Implement that the number is shown automatically
                             Console.WriteLine("Which weight do you want to change? (Type in 'all' if you want to change all)");
                             string UserOutput = Console.ReadLine() ?? "";
                             if (Extras.IsReturn(UserOutput))
@@ -223,49 +250,59 @@ class EditCLI
                                     {
                                         if (WeightNumber <= weights.Length)
                                         {
-                                            Console.WriteLine($"To what do you want to change the {WeightNumber}. weight?");
-                                            string NewWeightString = Console.ReadLine() ?? "";
-                                            if (Extras.IsReturn(NewWeightString))
-                                            {
-                                                Console.WriteLine("Returning to which weight to choose...");
-                                                WeightsError = true;
-                                            }
-                                            else if (double.TryParse(NewWeightString, out double NewWeightValue))
-                                            {
-                                                Console.WriteLine("Because the dev team want's to give the power to the user (Wrong), you can give the weigth every value you want to");
-                                                Console.WriteLine("Thats acually wrong but its 1 o'clock and I am not motivated to code limitations Lucky for you:)");
-                                                bool stupidError = false;
-                                                do {
-                                                    stupidError = false;
-                                                    Console.WriteLine($"The weight {WeightNumber} of neuron {neuronNumber} in the layer {layerNumber} will now be changed from {selectedNeuron.GetWeights()[WeightNumber - 1]} to {NewWeightValue}");
-                                                    Console.WriteLine("Please press Enter to Confirm or type in 'Return' to reject");
-                                                    string Banana = Console.ReadLine() ?? "";
-                                                    if (Extras.IsReturn(Banana))
-                                                    {
-                                                        Console.WriteLine("Return to weight value selection...");
-                                                    }
-                                                    else if (Banana == "")
-                                                    {
-                                                        Console.WriteLine("Confirmed");
-                                                        double[] neuronweights = selectedNeuron.GetWeights();
-                                                        neuronweights[WeightNumber - 1] = NewWeightValue;
-                                                        selectedNeuron.weights = neuronweights;
-                                                    }
-                                                    else
-                                                    {
-                                                        Console.WriteLine("Why do you do that???");
-                                                        Console.WriteLine("Do you think I have time to code for you loser?");
-                                                        Console.WriteLine("NO! I have not! (But I do it anyways because... idk... why do i make this??)");
-                                                        Console.WriteLine("Forget about this");
-                                                        Console.WriteLine("Try it again...");
-                                                        stupidError = true;
-                                                    }
-                                                } while (stupidError);
-                                            }
-                                            else
-                                            {
-                                                //Entry Point Please Code further here
-                                            }
+                                            bool WeightValueError = false;
+                                            do {
+                                                WeightValueError = false;
+                                                Console.WriteLine($"To what do you want to change the {WeightNumber}. weight?");
+                                                string NewWeightString = Console.ReadLine() ?? "";
+                                                if (Extras.IsReturn(NewWeightString))
+                                                {
+                                                    Console.WriteLine("Returning to which weight to choose...");
+                                                    WeightsError = true;
+                                                }
+                                                else if (double.TryParse(NewWeightString, out double NewWeightValue))
+                                                {
+                                                    Console.WriteLine("Because the dev team want's to give the power to the user (Wrong), you can give the weigth every value you want to");
+                                                    Console.WriteLine("Thats acually wrong but its 1 o'clock and I am not motivated to code limitations Lucky for you:)");
+                                                    bool stupidError = false;
+                                                    do {
+                                                        stupidError = false;
+                                                        Console.WriteLine($"The weight {WeightNumber} of neuron {neuronNumber} in the layer {layerNumber} will now be changed from {selectedNeuron.GetWeights()[WeightNumber - 1]} to {NewWeightValue}");
+                                                        Console.WriteLine("Please press Enter to Confirm or type in 'Return' to reject");
+                                                        string Banana = Console.ReadLine() ?? "";
+                                                        if (Extras.IsReturn(Banana))
+                                                        {
+                                                            Console.WriteLine("Return to weight value selection...");
+                                                        }
+                                                        else if (Banana == "")
+                                                        {
+                                                            Console.WriteLine("Confirmed");
+                                                            double[] neuronweights = selectedNeuron.GetWeights();
+                                                            neuronweights[WeightNumber - 1] = NewWeightValue;
+                                                            selectedNeuron.weights = neuronweights;
+                                                        }
+                                                        else
+                                                        {
+                                                            Console.WriteLine("Why do you do that???");
+                                                            Console.WriteLine("Do you think I have time to code for you loser?");
+                                                            Console.WriteLine("NO! I have not! (But I do it anyways because... idk... why do i make this??)");
+                                                            Console.WriteLine("Forget about this");
+                                                            Console.WriteLine("Try it again...");
+                                                            stupidError = true;
+                                                        }
+                                                    } while (stupidError);
+                                                }
+                                                else
+                                                {
+                                                    Console.WriteLine("Please type in a valid number.");
+                                                    WeightValueError = true;
+                                                }
+                                            } while (WeightValueError);
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("This neuron doesn't exist, please choose one, who exists");
+                                            WeightsError = true;
                                         }
                                     }
                                     else
@@ -280,7 +317,7 @@ class EditCLI
                 } while (NeuronError);
             }
         } while (Error);
-
+        Console.WriteLine("Operation succesfully completed.");
 
         return new MultipleValues<List<List<Neuron>>>
         {
@@ -288,4 +325,4 @@ class EditCLI
             HasError = false,
         };
     }
-    }
+}
