@@ -75,6 +75,7 @@ public class RunCLI
             {
                 output[j] = output[j];
             }
+            Extras.PressKey(); //Was jz?
             return new MultipleValues<double[]>
             {
                 Value = output,

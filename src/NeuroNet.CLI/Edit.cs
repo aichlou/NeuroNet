@@ -127,8 +127,6 @@ class EditCLI
             }
         } while (Error);
 
-
-
         return new MultipleValues<List<List<Neuron>>>
         {
           Value = network,
@@ -147,7 +145,7 @@ class EditCLI
                 ErrorMessage = "Network is null."
             };
         }
-        ShowCLI.ShowWeights(network);
+        ShowCLI.ShowNetwork(network);
         bool Error;
         do {
             Error = false;
@@ -170,12 +168,13 @@ class EditCLI
             }
             else
             {
-                Console.WriteLine($"You selected Layer {layerNumber}");
+                Console.WriteLine($"You selected Layer {layerNumber}:");
+                ShowCLI.ShowLayer(network[layerNumber]);
                 bool NeuronError = false;
                 do {
                     NeuronError = false;
                     Console.WriteLine($"This layer has {network[layerNumber - 1].Count} neurons.");
-                    Console.WriteLine("Enter the neuron number of the weight you want to edit:");
+                    Console.WriteLine("Enter the neuron number of the layer you want to edit:");
                     string? neuronInput = Console.ReadLine();
                     if (!int.TryParse(neuronInput, out int neuronNumber) || neuronNumber < 1 || neuronNumber > network[layerNumber - 1].Count)
                     {
@@ -215,7 +214,7 @@ class EditCLI
                                         string NewWeights = Console.ReadLine() ?? "";
                                         if (NewWeights == "") //I thing thats a bit useless but it's not bad either
                                         {
-                                            Console.WriteLine("Bro...Please type in something");
+                                            Console.WriteLine("Please type in something");
                                             AllWeightsError = true;
                                         }
                                         else if (Extras.IsReturn(NewWeights))
@@ -235,10 +234,16 @@ class EditCLI
                                                     selectedNeuron.SetWeights(doubleWeigths);
                                                     Console.WriteLine("Succesfully changed Neurons Weights");
                                                 }
+                                                else
+                                                {
+                                                    Console.WriteLine($"Please insert {selectedNeuron.GetWeights().Length} weights");
+                                                    AllWeightsError = true;
+                                                    //Todo: The program should show the previous entry. The user should be able to edit this entry
+                                                }
                                             }
                                             else
                                             {
-                                                Console.WriteLine("Please give only valid weights (No Text)");
+                                                Console.WriteLine("Please give only valid weights (No Text), seperated by commas");
                                                 AllWeightsError = true;
                                             }
                                         }
@@ -284,7 +289,7 @@ class EditCLI
                                                         else
                                                         {
                                                             Console.WriteLine("Why do you do that???");
-                                                            Console.WriteLine("Do you think I have time to code for you loser?");
+                                                            Console.WriteLine("Do you think I have time to code for you?");
                                                             Console.WriteLine("NO! I have not! (But I do it anyways because... idk... why do i make this??)");
                                                             Console.WriteLine("Forget about this");
                                                             Console.WriteLine("Try it again...");
