@@ -78,6 +78,7 @@ class EditCLI
                                 break;
                             }
                             Console.WriteLine("Error editing weights: " + EditWeightsResult.ErrorMessage);
+                            Console.WriteLine("Please repeat the process");
                             Error = true;
                             break;
                         }
@@ -90,7 +91,27 @@ class EditCLI
                         break;
                     case 3:
                         Console.WriteLine("This isn't implemented yet");
-                        //Todo add Number of Layers or Neurons
+                        network = network ?? throw new Exception("Network cannt be null");
+                        MultipleValues<List<List<Neuron>>> EditNetworkResult = EditCLI.NumberLayerNeurons(network);
+                        if (EditNetworkResult.HasError)
+                        {
+                            if (EditNetworkResult.ErrorMessage == Program.returnString)
+                            {
+                                Console.WriteLine("Returning to Edit Menu...");
+                                Error = true;
+                                break;
+                            }
+                            Console.WriteLine("Error editing weights: " + EditNetworkResult.ErrorMessage);
+                            Console.WriteLine("Please repeat the process");
+                            Error = true;
+                            break;
+                        }
+                        network = EditNetworkResult.Value ?? throw new Exception("Unexpected null value for network after editing weights.");
+                        Error = EditNetworkResult.HasError;
+                        if (!Error)
+                        {
+                            SaveCLI.SaveNetworkToFileY(network, "overwrite", currentnnName);
+                        } 
                         break;
                     case 4:
                         Console.WriteLine("This isn't implemented yet");
@@ -328,6 +349,27 @@ class EditCLI
         {
             Value = network,
             HasError = false,
+        };
+    }
+
+    static public MultipleValues<int[,]> NavigateThrowNetwork()
+    {
+        return new MultipleValues<int[,]>
+        {
+            HasError = true
+        };
+    }
+
+
+    static public MultipleValues<List<List<Neuron>>> NumberLayerNeurons (List<List<Neuron>> network)
+    {
+        ShowCLI.ShowNetwork(network);
+
+
+        return new MultipleValues<List<List<Neuron>>>
+        {
+            Value = network,
+            HasError = true
         };
     }
 }

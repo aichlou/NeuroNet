@@ -7,7 +7,7 @@ class ShowCLI
 {
     public static void ShowNetwork(List<List<Neuron>> network)
     {
-        Console.WriteLine("Showing Weights:");
+        Console.WriteLine("Showing Network:");
         for (int i = 0; i < network.Count; i++)
         {
             Console.WriteLine($"Layer {i + 1}:");
