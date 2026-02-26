@@ -25,13 +25,13 @@ class EditCLI
         bool Error = false;
         do {
             Error = false;
-            Console.WriteLine("Edit Neural Network");
+            Console.WriteLine("Edit neural network");
             Console.WriteLine("What do you want to do?");
-            Console.WriteLine("1. Randomize Weights");
-            Console.WriteLine("2. Edit Weights Manually");
-            Console.WriteLine("3. Edit Number of Layers & Neurons");
-            Console.WriteLine("4. Edit Name of the Network");
-            //Console.WriteLine("4. Edit Neuron Types");
+            Console.WriteLine("1. Randomize weights");
+            Console.WriteLine("2. Edit weights manually");
+            Console.WriteLine("3. Edit number of layers & neurons");
+            Console.WriteLine("4. Edit name of the network");
+            Console.WriteLine("5. Return to main menu");
             string UserOutputString = Console.ReadLine() ?? string.Empty;
             if (!int.TryParse(UserOutputString, out int UserOutput))
             {
@@ -61,6 +61,7 @@ class EditCLI
                         }
                         network = Edit.RandomizeWeights(network);
                         SaveCLI.SaveNetworkToFileY(network, "overwrite", currentnnName);
+                        ShowCLI.ShowNetwork(network);
                         Console.WriteLine("Weights randomized and saved to file");
                         break;
                     case 2:
@@ -116,6 +117,9 @@ class EditCLI
                     case 4:
                         Console.WriteLine("This isn't implemented yet");
                         //Todo: Change Name of the network
+                        break;
+                    case 5:
+                        Console.WriteLine("This isn't implemented yet");
                         break;
                     default:
                         Console.WriteLine("Please insert one of the shown Options");
@@ -190,7 +194,7 @@ class EditCLI
             else
             {
                 Console.WriteLine($"You selected Layer {layerNumber}:");
-                ShowCLI.ShowLayer(network[layerNumber]);
+                ShowCLI.ShowLayer(network[layerNumber - 1]);
                 bool NeuronError = false;
                 do {
                     NeuronError = false;
@@ -288,35 +292,10 @@ class EditCLI
                                                 }
                                                 else if (double.TryParse(NewWeightString, out double NewWeightValue))
                                                 {
-                                                    Console.WriteLine("Because the dev team want's to give the power to the user (Wrong), you can give the weigth every value you want to");
-                                                    Console.WriteLine("Thats acually wrong but its 1 o'clock and I am not motivated to code limitations Lucky for you:)");
-                                                    bool stupidError = false;
-                                                    do {
-                                                        stupidError = false;
-                                                        Console.WriteLine($"The weight {WeightNumber} of neuron {neuronNumber} in the layer {layerNumber} will now be changed from {selectedNeuron.GetWeights()[WeightNumber - 1]} to {NewWeightValue}");
-                                                        Console.WriteLine("Please press Enter to Confirm or type in 'Return' to reject");
-                                                        string Banana = Console.ReadLine() ?? "";
-                                                        if (Extras.IsReturn(Banana))
-                                                        {
-                                                            Console.WriteLine("Return to weight value selection...");
-                                                        }
-                                                        else if (Banana == "")
-                                                        {
-                                                            Console.WriteLine("Confirmed");
-                                                            double[] neuronweights = selectedNeuron.GetWeights();
-                                                            neuronweights[WeightNumber - 1] = NewWeightValue;
-                                                            selectedNeuron.weights = neuronweights;
-                                                        }
-                                                        else
-                                                        {
-                                                            Console.WriteLine("Why do you do that???");
-                                                            Console.WriteLine("Do you think I have time to code for you?");
-                                                            Console.WriteLine("NO! I have not! (But I do it anyways because... idk... why do i make this??)");
-                                                            Console.WriteLine("Forget about this");
-                                                            Console.WriteLine("Try it again...");
-                                                            stupidError = true;
-                                                        }
-                                                    } while (stupidError);
+                                                    double[] neuronweights = selectedNeuron.GetWeights();
+                                                    neuronweights[WeightNumber - 1] = NewWeightValue;
+                                                    selectedNeuron.weights = neuronweights;
+                                                    Console.WriteLine($"The weight {WeightNumber} of neuron {neuronNumber} in the layer {layerNumber} have now been changed from {selectedNeuron.GetWeights()[WeightNumber - 1]} to {NewWeightValue}");
                                                 }
                                                 else
                                                 {
