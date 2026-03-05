@@ -22,7 +22,7 @@ internal class Program
                 do
                 {
                     Error = false;
-                    if (!again) {
+                    if (!again || Way == "") {
                         Console.Clear();
                         Console.WriteLine("NeuroNet");
                         Console.WriteLine("What would you like to do?");
@@ -183,13 +183,7 @@ internal class Program
                                 break;
                             case 3:
                                 var editResult = EditCLI.Edit_Network(LoadedNetwork, currentnnName);
-                                if (editResult.HasError){
-                                    if (Extras.IsReturn(editResult.ErrorMessage)) {
-                                        Error = true;
-                                        again = true;
-                                    }
-                                    else Error = true;
-                                }
+                                if (editResult.HasError)Error = true;
                                 else
                                 {
                                     LoadedNetwork = (editResult.Value ?? throw new Exception("Network cannot be null, when HasError is false")).Value1;
@@ -197,6 +191,9 @@ internal class Program
                                 }
                                 break;
                             case 4: 
+                                Error = false;
+                                again = true;
+                                Way = "";
                                 break;
                             case 5:
                                 Console.WriteLine("Exiting Program...");

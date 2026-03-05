@@ -121,8 +121,15 @@ class EditCLI
                         if (result == "Error") Error = true;
                         break;
                     case 5:
-                        Console.WriteLine("This isn't implemented yet");
-                        break;
+                        return new MultipleValues<TwoValues<List<List<Neuron>>, string?>>
+                        {
+                            HasError = true,
+                            Value = new TwoValues<List<List<Neuron>>, string?>
+                            {
+                                Value1 = network,
+                                Value2 = currentnnName,
+                            },
+                        };
                     default:
                         Console.WriteLine("Please insert one of the shown Options");
                         Error = true;
@@ -156,7 +163,7 @@ class EditCLI
 
     return new MultipleValues<TwoValues<List<List<Neuron>>, string?>>
     {
-        HasError = true,
+        HasError = true, //Why true?
         Value = new TwoValues<List<List<Neuron>>, string?>
         {
             Value1 = network,
