@@ -1,6 +1,8 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Net.NetworkInformation;
 using NeuroNet.Core;
+using Spectre.Console;
 namespace NeuroNet.CLI;
 
 internal class Program
@@ -181,7 +183,7 @@ internal class Program
                                 break;
                             case 3:
                                 var editResult = EditCLI.Edit_Network(LoadedNetwork, currentnnName);
-                                if (editResult.HasError)                            {
+                                if (editResult.HasError){
                                     if (Extras.IsReturn(editResult.ErrorMessage)) {
                                         Error = true;
                                         again = true;
@@ -190,7 +192,8 @@ internal class Program
                                 }
                                 else
                                 {
-                                    Error = true;
+                                    LoadedNetwork = (editResult.Value ?? throw new Exception("Network cannot be null, when HasError is false")).Value1;
+                                    currentnnName = (editResult.Value ?? throw new Exception("Network cannot be null, when HasError is false")).Value2 ?? currentnnName;
                                 }
                                 break;
                             case 4: 

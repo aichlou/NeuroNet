@@ -54,4 +54,11 @@ public class Edit
         }
         return network;
     }
+    public static string CloneFile(string FirstFile, string newFile)
+    {
+        var dataMulti = Load.ContentOf(FirstFile);
+        if (dataMulti.HasError) return $"Error: {dataMulti.ErrorMessage}";
+        Save.SaveNetworkToFile(newFile, dataMulti.Value ?? throw new Exception("ContentOf() should not return null"));
+        return "done";
+    }
 }

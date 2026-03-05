@@ -1,4 +1,5 @@
 using NeuroNet.Core;
+using Spectre.Console;
 
 namespace NeuroNet.CLI;
 
@@ -20,7 +21,7 @@ class EditCLI
         return network;
     }
 
-    public static MultipleValues<List<List<Neuron>>> Edit_Network(List<List<Neuron>> network, string currentnnName)
+    public static MultipleValues<TwoValues<List<List<Neuron>>, string?>> Edit_Network(List<List<Neuron>> network, string currentnnName)
     {
         bool Error = false;
         do {
@@ -38,10 +39,14 @@ class EditCLI
                 if (Extras.IsReturn(UserOutputString))
                 {
                     Console.WriteLine("Returning to Main Menu...");
-                    return new MultipleValues<List<List<Neuron>>>
+                    return new MultipleValues<TwoValues<List<List<Neuron>>, string?>>
                     {
                         HasError = true,
-                        Value = network,
+                        Value = new TwoValues<List<List<Neuron>>, string?>
+                        {
+                            Value1 = network,
+                            Value2 = currentnnName,
+                        },
                         ErrorMessage = Program.returnString,
                     };
                 }
@@ -50,6 +55,7 @@ class EditCLI
             }
             else
             {
+                network = network ?? throw new Exception("Network cannot be null");
                 switch (UserOutput)
                 {
                     case 1:
@@ -91,10 +97,10 @@ class EditCLI
                         } 
                         break;
                     case 3:
-                        Console.WriteLine("This isn't implemented yet");
                         network = network ?? throw new Exception("Network cannt be null");
                         MultipleValues<List<List<Neuron>>> EditNetworkResult = EditCLI.NumberLayerNeurons(network);
-                        if (EditNetworkResult.HasError)
+                        Error = EditNetworkResult.HasError;
+                        if (Error)
                         {
                             if (EditNetworkResult.ErrorMessage == Program.returnString)
                             {
@@ -108,15 +114,11 @@ class EditCLI
                             break;
                         }
                         network = EditNetworkResult.Value ?? throw new Exception("Unexpected null value for network after editing weights.");
-                        Error = EditNetworkResult.HasError;
-                        if (!Error)
-                        {
-                            SaveCLI.SaveNetworkToFileY(network, "overwrite", currentnnName);
-                        } 
+                        SaveCLI.SaveNetworkToFileY(network, "overwrite", currentnnName);
                         break;
                     case 4:
-                        Console.WriteLine("This isn't implemented yet");
-                        //Todo: Change Name of the network
+                        string result = ChangeName(currentnnName);
+                        if (result == "Error") Error = true;
                         break;
                     case 5:
                         Console.WriteLine("This isn't implemented yet");
@@ -152,11 +154,16 @@ class EditCLI
             }
         } while (Error);
 
-        return new MultipleValues<List<List<Neuron>>>
+    return new MultipleValues<TwoValues<List<List<Neuron>>, string?>>
+    {
+        HasError = true,
+        Value = new TwoValues<List<List<Neuron>>, string?>
         {
-          Value = network,
-          HasError = false,
-        };
+            Value1 = network,
+            Value2 = currentnnName,
+        },
+        ErrorMessage = Program.returnString,
+    };
     }
 
     public static MultipleValues<List<List<Neuron>>> EditWeightsManually(List<List<Neuron>>? network)
@@ -350,5 +357,39 @@ class EditCLI
             Value = network,
             HasError = true
         };
+    }
+
+    static public string ChangeName(string currentnnName)
+    {
+        
+        Console.WriteLine($"The current Name of the Network is {currentnnName}");
+        Console.WriteLine("To what do you want to change the name your network?");
+        string newName = Console.ReadLine() ?? "";
+        if (Extras.IsReturn(newName) || newName == "Error")
+        {
+            Console.WriteLine("Returning to Edit Menu");
+            return "Error";
+        }
+        if (newName == "")
+        {
+            Console.WriteLine("Please type something in");
+            return ChangeName(currentnnName);
+        }
+        else
+        {
+            Console.WriteLine($"This is in the variable currentnnName: {currentnnName}");
+            string status = Edit.CloneFile(currentnnName, newName);
+            Console.WriteLine($"Cloning target is: {currentnnName}");
+            Console.WriteLine($"Status: {status}");
+            if (status.Contains("Error")) {
+                Console.WriteLine("Something went wrong");
+                return "Error";
+            }
+            else if (status == "done") {
+                SaveCLI.DeleteFile(currentnnName);
+                return newName;
+            }
+            else throw new Exception("Something went wrong, Please try again");
+        }
     }
 }

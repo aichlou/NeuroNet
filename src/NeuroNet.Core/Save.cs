@@ -7,7 +7,7 @@ public class Save
     static string baseDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
     static string appDataPath = Path.Combine(baseDataPath, "NeuroNet");
 
-    public static void SaveNetworkToFile(string nnName, string jsonData, Action<string>? Message = null)
+    public static void SaveNetworkToFile(string nnName, string jsonData)
     {
         if (!Directory.Exists(appDataPath))
         {
