@@ -54,11 +54,21 @@ public class Edit
         }
         return network;
     }
-    public static string CloneFile(string FirstFile, string newFile)
+    public static string CloneFile(string FirstFile, string newFileName, string currentnnName)
     {
         var dataMulti = Load.ContentOf(FirstFile);
         if (dataMulti.HasError) return $"Error: {dataMulti.ErrorMessage}";
-        Save.SaveNetworkToFile(newFile, dataMulti.Value ?? throw new Exception("ContentOf() should not return null"));
+        if (dataMulti.Value == null) { return "Error: Value is not null";}
+        string header = "{\"Metadata\":{\"Name\":";
+        string ToAdd = $"{header}\"{newFileName}\"";
+        string content = ToAdd + 
+            new string(
+            dataMulti.Value
+            .Skip(header.Length)
+            .SkipWhile(c => c != '\"')
+            .Skip(currentnnName.Length + 2)
+            .ToArray());
+        Save.SaveNetworkToFile(newFileName, content);
         return "done";
     }
 }

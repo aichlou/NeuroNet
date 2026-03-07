@@ -385,7 +385,7 @@ class EditCLI
         else
         {
             Console.WriteLine($"This is in the variable currentnnName: {currentnnName}");
-            string status = Edit.CloneFile(currentnnName, newName);
+            string status = Edit.CloneFile(currentnnName, newName, currentnnName);
             Console.WriteLine($"Cloning target is: {currentnnName}");
             Console.WriteLine($"Status: {status}");
             if (status.Contains("Error")) {
