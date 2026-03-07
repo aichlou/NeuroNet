@@ -72,7 +72,7 @@ class EditCLI
                         break;
                     case 2:
                         Console.WriteLine("Me (the developer) don't recommend to change the Weights here...");
-                        Console.WriteLine("I personally would wait until the v.0.5.0 - Graphical Update comes and edit the weights then...");
+                        Console.WriteLine("I personally would wait until the v.0.4.0 - Graphical Update comes and edit the weights then...");
                         Console.WriteLine("But I wish you good Luck");
                         Console.WriteLine();
                         MultipleValues<List<List<Neuron>>> EditWeightsResult = EditCLI.EditWeightsManually(network);
@@ -234,7 +234,7 @@ class EditCLI
                         do {
                             WeightsError = false;
                             double[] weights = selectedNeuron.GetWeights();
-                            Console.WriteLine($"Current weights: {string.Join(", ", weights.Select(w => w.ToString("F2")))}"); //Implement that the number is shown automatically
+                            Console.WriteLine($"Current weights: {string.Join(", ", weights.Select(w => w.ToString("F3")))}");
                             Console.WriteLine("Which weight do you want to change? (Type in 'all' if you want to change all)");
                             string UserOutput = Console.ReadLine() ?? "";
                             if (Extras.IsReturn(UserOutput))
@@ -251,7 +251,7 @@ class EditCLI
                                         AllWeightsError = false;
                                         Console.WriteLine("Please type in the new weights seperated by commas");
                                         string NewWeights = Console.ReadLine() ?? "";
-                                        if (NewWeights == "") //I thing thats a bit useless but it's not bad either
+                                        if (NewWeights == "")
                                         {
                                             Console.WriteLine("Please type in something");
                                             AllWeightsError = true;
@@ -277,7 +277,6 @@ class EditCLI
                                                 {
                                                     Console.WriteLine($"Please insert {selectedNeuron.GetWeights().Length} weights");
                                                     AllWeightsError = true;
-                                                    //Todo: The program should show the previous entry. The user should be able to edit this entry
                                                 }
                                             }
                                             else
@@ -393,7 +392,18 @@ class EditCLI
                 return "Error";
             }
             else if (status == "done") {
-                SaveCLI.DeleteFile(currentnnName);
+                string Message = Save.DeleteFile(currentnnName);
+                switch (Message)
+                {
+                    case "done":
+                        break;
+                    case "file not found":
+                        Console.WriteLine("File does not exist.");
+                        break;
+                    default:
+                        Console.WriteLine("An error occurred. Please report the issue on GitHub.");
+                        break;
+                }
                 return newName;
             }
             else throw new Exception("Something went wrong, Please try again");
