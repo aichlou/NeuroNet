@@ -23,14 +23,14 @@ public class Edit
         return true;
     }
 
-    public static List<List<Neuron>> RandomizeWeights(List<List<Neuron>> network)
+    public static List<List<Neuron>> RandomizeWeights(List<List<Neuron>> network, double minValue = -1, double maxValue = 1)
     {
         Random rand = new Random();
         for (int i = 0; i < network.Count; i++)
         {
             for (int j = 0; j < network[i].Count; j++)
             {
-                network[i][j].RandomizeWeights(rand);
+                network[i][j].RandomizeWeights(rand, minValue, maxValue);
             }
         }
         return network;

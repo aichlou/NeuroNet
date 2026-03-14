@@ -65,7 +65,66 @@ class EditCLI
                             Error = true;
                             break;
                         }
-                        network = Edit.RandomizeWeights(network);
+                        bool RangeError = false;
+                        do {
+                            Console.WriteLine("Do you want to use the default(-1 to 1) Range or a customized? (d/c)");
+                            string input = Console.ReadLine() ?? "";
+                            if (input.Trim() == "") {
+                                Console.WriteLine("Please trype somethinf in...");
+                                RangeError = false;
+                            }
+                            else if (Extras.IsReturn(input))
+                            {
+                                Error = true;
+                            }
+                            else if (input.ToLower() == "d")
+                            {
+                                network = Edit.RandomizeWeights(network);
+                            }
+                            else if (input.ToLower() == "c")
+                            {
+                                bool CustomError;
+                                do {
+                                    CustomError = false;
+                                    Console.WriteLine("Please type in the Range in the [lower, upper]-Format");
+                                    try {
+                                        string RangeInput = Console.ReadLine() ?? "";
+                                        if (Extras.IsReturn(RangeInput)) RangeError = true;
+                                        double LowerBorder = double.Parse(RangeInput
+                                            .Reverse()
+                                            .SkipWhile(c => c != ',')
+                                            .Skip(1)
+                                            .Reverse()
+                                            .ToArray() ?? throw new Exception("Lower border could not be resolved"));
+                                        double UpperBorder = double.Parse(RangeInput
+                                            .SkipWhile(c => c != ',')
+                                            .Skip(1)
+                                            .ToArray() ?? throw new Exception("Upper border could bot be resolved"));
+                                        if (LowerBorder >= UpperBorder)
+                                        {
+                                            Console.WriteLine("The Lower Border should be smaller than the Upper Border");
+                                            Console.WriteLine("Please try again");
+                                            CustomError = true;
+                                        }
+                                        else
+                                        {
+                                            network = Edit.RandomizeWeights(network, LowerBorder, UpperBorder);
+                                        }
+                                    }
+                                    catch (Exception c)
+                                    {
+                                        Console.WriteLine($"Something went wrong: {c.Message}");
+                                        Console.WriteLine("Please try again");
+                                        CustomError = true;
+                                    }
+                                } while (CustomError);
+                            }
+                            else
+                            {
+                                Console.WriteLine("This is no valid Input. Please try again.");
+                                RangeError = false;
+                            }
+                        } while (RangeError);
                         SaveCLI.SaveNetworkToFileY(network, "overwrite", currentnnName);
                         ShowCLI.ShowNetwork(network);
                         Console.WriteLine("Weights randomized and saved to file");
