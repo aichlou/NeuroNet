@@ -51,8 +51,6 @@ dotnet run --project NeuroNet.CLI
 
 # Roadmap
 
-
-
 ### Overview
 
 - v0.1  Genesis
@@ -63,34 +61,30 @@ dotnet run --project NeuroNet.CLI
 - v1.0  Stability
 - v1.1  Ecosystem
 
-### v0.1 — Core Functionality
-Networks can be created, executed and stored.
+## Current - Roadmap to v0.3.0
 
-<details>
-<summary>Details</summary>
+### v0.2.1:
 
-- create networks
-- run networks
-- customise networks
-- save & load networks
+- Posibility to set Neurons per Layer in one row seperated by kommas
+- Menu Point to edit many parameters of the neural network
+### v0.2.2:
 
-</details>
+- Implement Cost function to measure the accuracy of the network
+- New Navigation in the Project
 
+### v0.2.3:
+- Implement Learning feature with Backpropagation
 
-### v0.2 — Architecture & Stability 
-Internal restructuring and usability improvements.
+### v0.2.4:
+- Implement Library
 
-<details>
-<summary>Details</summary>
+### v0.3.0:
+- Possibility to load networks from a custom directory
+- Revise the GitHub Issue feature in the programm
 
-- split into `.Core` and `.CLI`
-- improved CLI UI
-- return feature
-- stability improvements
+## Future
 
-</details>
-
-### v0.3 — Learning <- On the way
+### v0.3 — Learning
 Networks gain the ability to adapt.
 
 <details>
@@ -131,6 +125,36 @@ Polished, documented, stable.
 
 ### v1.1 — Ecosystem
 Public API and project website.
+
+## Past 
+
+
+### v0.1 — Core Functionality
+Networks can be created, executed and stored.
+
+<details>
+<summary>Details</summary>
+
+- create networks
+- run networks
+- customise networks
+- save & load networks
+
+</details>
+
+
+### v0.2 — Architecture & Stability 
+Internal restructuring and usability improvements.
+
+<details>
+<summary>Details</summary>
+
+- split into `.Core` and `.CLI`
+- improved CLI UI
+- return feature
+- stability improvements
+
+</details>
 
 <br>
 
