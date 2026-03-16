@@ -38,10 +38,50 @@ public class CreateCLI
                 }
                 networkData = new int[layers];
             }
-            NeuronCountForLayer(networkData);
-            if (networkData[0] == 0) //Network Creation was exited with the Return-Keyword
+            if (layers >= 10)
             {
-                Error = true;
+                bool InputError;
+                do {
+                    InputError = false;
+                    Console.WriteLine("Do you want to give the Neurons per Layer in one input or for each Layer a input?(y/n)");
+                    string input = Console.ReadLine() ?? "";
+                    if (Extras.IsReturn(input))
+                    {
+                        Console.WriteLine("Redirecting to Creation Process...");
+                        Error = true;
+                    }
+                    else if (input == "")
+                    {
+                        Console.WriteLine("Please type something in");
+                        InputError = true;
+                    }
+                    else if (input.ToLower() == "y" && input.ToLower() == "yes")
+                    {
+                        bool KommaError;
+                        do {
+                            KommaError = false;
+                            Console.Write($"Please type in the neurons per Layer seperated by kommas: ");
+                            string KommasInput = Console.ReadLine() ?? "";
+                            try {
+                                networkData = Array.ConvertAll(KommasInput.Split(','), int.Parse);
+                            }
+                            catch(Exception e)
+                            {
+                                Console.WriteLine($"An Error occurred while Converting Input into Array: {e.Message}");
+                                Console.WriteLine("Please try again");
+                                KommaError = true;
+                            }   
+                        } while(KommaError);
+                    }
+                    else if (input.ToLower() == "n" && input.ToLower() == "no")
+                    {
+                        networkData = NeuronCountForLayer(networkData);
+                        if (networkData[0] == 0) //Network Creation was exited with the Return-Keyword
+                        {
+                            Error = true;
+                        }
+                    }
+                } while (InputError);
             }
         } while (Error);
         

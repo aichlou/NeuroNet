@@ -55,7 +55,7 @@ dotnet run --project NeuroNet.CLI
 
 - v0.1  Genesis
 - v0.2  Structure
-- v0.3  Learning 
+- [v0.3  Learning](/docs/roadmap/v0.2-v0.3.md) 
 - v0.4  Vision
 - v0.5  Expansion
 - v1.0  Stability
