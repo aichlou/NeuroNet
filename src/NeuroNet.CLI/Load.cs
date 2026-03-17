@@ -34,7 +34,7 @@ class LoadCLI {
         {
             Console.WriteLine($"{i + 1}. {networks[i]}");            
         }
-        Console.WriteLine("Please type in the name of the Neural Network you would like to load:");
+        Console.WriteLine("Please type in the name or Index of the Neural Network you would like to load:");
         string? nnName = Console.ReadLine();
         if ( Extras.IsReturn(nnName))
         {

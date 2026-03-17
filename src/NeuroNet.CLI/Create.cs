@@ -62,13 +62,26 @@ public class CreateCLI
                             KommaError = false;
                             Console.Write($"Please type in the neurons per Layer seperated by kommas: ");
                             string KommasInput = Console.ReadLine() ?? "";
-                            try {
-                                networkData = Array.ConvertAll(KommasInput.Split(','), int.Parse);
+                            try
+                            {
+                                int[] LayerArray = KommasInput
+                                    .Split(',')
+                                    .Select(x => x.Trim())
+                                    .Select(x => int.Parse(x))
+                                    .ToArray();
+                                if (LayerArray.Length == networkData.Length) {
+                                    networkData = LayerArray;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("The number of your inputs does not match the number of layers");
+                                    Console.WriteLine("Please try again");
+                                    KommaError = true;
+                                }
                             }
                             catch(Exception e)
                             {
-                                Console.WriteLine($"An Error occurred while Converting Input into Array: {e.Message}");
-                                Console.WriteLine("Please try again");
+                                Console.WriteLine("Please insert a valid Input");
                                 KommaError = true;
                             }   
                         } while(KommaError);
