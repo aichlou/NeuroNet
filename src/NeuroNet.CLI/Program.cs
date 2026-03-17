@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
 using NeuroNet.Core;
@@ -150,7 +150,7 @@ internal class Program
                     }
                     else
                     {
-                        LoadedNetwork = LoadedNetwork?? throw new Exception("Loaded Netwok cannot be null");
+                        LoadedNetwork = LoadedNetwork ?? throw new Exception("Loaded Network cannot be null");
                         switch(UserOutput)
                         {
                             case 1:
@@ -174,13 +174,12 @@ internal class Program
                                 Console.WriteLine("CAREFUL: This feature isn't working yet");
                                 try {
                                     Error = Learn.UserDialoge(LoadedNetwork);
+                                    Console.WriteLine("You Exited the Learning Process Successfully");
                                 }
                                 catch (Exception e)
                                 {
-                                    Console.WriteLine();
                                     Console.WriteLine($"You Exited the Learning Process with the Exception {e.Data}");
                                 }
-                                Console.WriteLine("You Exited the Learning Process Sucessfully");
                                 break;
                             case 3:
                                 var editResult = EditCLI.Edit_Network(LoadedNetwork, currentnnName);

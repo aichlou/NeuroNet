@@ -3,10 +3,11 @@ namespace NeuroNet.CLI;
 using System.Xml.Schema;
 using NeuroNet.Core;
 
-class ShowCLI
+static class ShowCLI
 {
     public static void ShowNetwork(List<List<Neuron>> network)
     {
+        ArgumentNullException.ThrowIfNull(network);
         Console.WriteLine("Showing Network:");
         for (int i = 0; i < network.Count; i++)
         {

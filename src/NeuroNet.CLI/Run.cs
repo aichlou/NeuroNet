@@ -8,7 +8,7 @@ public class RunCLI
     {
         bool Error;
         List<double> inputData = new List<double>();
-            if(LoadedNetwork == null || LoadedNetwork.Count() == 0 || LoadedNetwork[0].Count() == 0)
+            if(LoadedNetwork == null || LoadedNetwork.Count == 0 || LoadedNetwork[0] == null || LoadedNetwork[0].Count == 0)
             {
                 Console.WriteLine("No Neural Network loaded. Exiting...");
                 return new MultipleValues<double[]> 
@@ -71,10 +71,6 @@ public class RunCLI
             while(Error);
             Console.WriteLine("Running Neural Network...");
             double[] output = NeuroNet.Core.Run.RunNeuralNetwork(LoadedNetwork, inputData);
-            for (int j = 0; j < output.Length; j++)
-            {
-                output[j] = output[j];
-            }
             return new MultipleValues<double[]>
             {
                 Value = output,

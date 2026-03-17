@@ -59,19 +59,13 @@ class EditCLI
                 switch (UserOutput)
                 {
                     case 1:
-                        if (network == null)
-                        {
-                            Console.WriteLine("Cannot randomize: network is null.");
-                            Error = true;
-                            break;
-                        }
                         bool RangeError = false;
                         do {
                             Console.WriteLine("Do you want to use the default(-1 to 1) Range or a customized? (d/c)");
                             string input = Console.ReadLine() ?? "";
                             if (input.Trim() == "") {
-                                Console.WriteLine("Please trype somethinf in...");
-                                RangeError = false;
+                                Console.WriteLine("Please trype something in...");
+                                RangeError = true;
                             }
                             else if (Extras.IsReturn(input))
                             {
@@ -99,7 +93,7 @@ class EditCLI
                                         double UpperBorder = double.Parse(RangeInput
                                             .SkipWhile(c => c != ',')
                                             .Skip(1)
-                                            .ToArray() ?? throw new Exception("Upper border could bot be resolved"));
+                                            .ToArray() ?? throw new Exception("Upper border could not be resolved"));
                                         if (LowerBorder >= UpperBorder)
                                         {
                                             Console.WriteLine("The Lower Border should be smaller than the Upper Border");
@@ -122,7 +116,7 @@ class EditCLI
                             else
                             {
                                 Console.WriteLine("This is no valid Input. Please try again.");
-                                RangeError = false;
+                                RangeError = true;
                             }
                         } while (RangeError);
                         SaveCLI.SaveNetworkToFileY(network, "overwrite", currentnnName);
@@ -156,7 +150,7 @@ class EditCLI
                         } 
                         break;
                     case 3:
-                        network = network ?? throw new Exception("Network cannt be null");
+                        network = network ?? throw new Exception("Network cannot be null");
                         MultipleValues<List<List<Neuron>>> EditNetworkResult = EditCLI.NumberLayerNeurons(network);
                         Error = EditNetworkResult.HasError;
                         if (Error)
@@ -178,6 +172,7 @@ class EditCLI
                     case 4:
                         string result = ChangeName(currentnnName);
                         if (result == "Error") Error = true;
+                        else currentnnName = result;
                         break;
                     case 5:
                         return new MultipleValues<TwoValues<List<List<Neuron>>, string?>>
@@ -196,19 +191,19 @@ class EditCLI
                 }
                 if (!Error) {
                     Console.WriteLine("Do you want to Edit further? (y/n)");
-                    string UserInupt = Console.ReadLine() ?? "";
-                    if (Extras.IsReturn(UserInupt))
+                    string UserInput = Console.ReadLine() ?? "";
+                    if (Extras.IsReturn(UserInput))
                     {
                         //Todo: I dont want to do this
                         Console.WriteLine("This isn't implemented yet so you will be redirected to the main menu...");
                     }
-                    else if (UserInupt.ToLower() == "y")
+                    else if (UserInput.ToLower() == "y")
                     {
                         //Console.WriteLine("Really? You want to stay in my shi**y menu?");
                         Console.WriteLine("On the way to the Edit menu...");
                         Error = true;
                     }
-                    else if (UserInupt.ToLower() == "n")
+                    else if (UserInput.ToLower() == "n")
                     {
                         Console.WriteLine("You will be redirected to the main menu...");
                     }
@@ -220,16 +215,16 @@ class EditCLI
             }
         } while (Error);
 
-    return new MultipleValues<TwoValues<List<List<Neuron>>, string?>>
-    {
-        HasError = true, //Why true?
-        Value = new TwoValues<List<List<Neuron>>, string?>
+        return new MultipleValues<TwoValues<List<List<Neuron>>, string?>>
         {
-            Value1 = network,
-            Value2 = currentnnName,
-        },
-        ErrorMessage = Program.returnString,
-    };
+            HasError = false,
+            Value = new TwoValues<List<List<Neuron>>, string?>
+            {
+                Value1 = network,
+                Value2 = currentnnName,
+            },
+            ErrorMessage = Program.returnString,
+        };
     }
 
     public static MultipleValues<List<List<Neuron>>> EditWeightsManually(List<List<Neuron>>? network)
@@ -326,10 +321,10 @@ class EditCLI
 
                                             if (StringWeights.All(w => double.TryParse(w, out _)))
                                             {
-                                                double[] doubleWeigths = StringWeights.Select(w => double.Parse(w)).ToArray();
-                                                if (doubleWeigths.Length == selectedNeuron.GetWeights().Length)
+                                                double[] doubleWeights = StringWeights.Select(w => double.Parse(w)).ToArray();
+                                                if (doubleWeights.Length == selectedNeuron.GetWeights().Length)
                                                 {
-                                                    selectedNeuron.SetWeights(doubleWeigths);
+                                                    selectedNeuron.SetWeights(doubleWeights);
                                                     Console.WriteLine("Succesfully changed Neurons Weights");
                                                 }
                                                 else
@@ -365,9 +360,10 @@ class EditCLI
                                                 else if (double.TryParse(NewWeightString, out double NewWeightValue))
                                                 {
                                                     double[] neuronweights = selectedNeuron.GetWeights();
+                                                    double oldValue = neuronweights[WeightNumber - 1];
                                                     neuronweights[WeightNumber - 1] = NewWeightValue;
                                                     selectedNeuron.weights = neuronweights;
-                                                    Console.WriteLine($"The weight {WeightNumber} of neuron {neuronNumber} in the layer {layerNumber} have now been changed from {selectedNeuron.GetWeights()[WeightNumber - 1]} to {NewWeightValue}");
+                                                    Console.WriteLine($"The weight {WeightNumber} of neuron {neuronNumber} in layer {layerNumber} has been changed from {oldValue} to {NewWeightValue}");
                                                 }
                                                 else
                                                 {
@@ -403,16 +399,7 @@ class EditCLI
         };
     }
 
-    static public MultipleValues<int[,]> NavigateThrowNetwork()
-    {
-        return new MultipleValues<int[,]>
-        {
-            HasError = true
-        };
-    }
-
-
-    static public MultipleValues<List<List<Neuron>>> NumberLayerNeurons (List<List<Neuron>> network)
+    static public MultipleValues<List<List<Neuron>>> NumberLayerNeurons (List<List<Neuron>> network) //TODO
     {
         ShowCLI.ShowNetwork(network);
 

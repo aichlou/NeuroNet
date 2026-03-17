@@ -43,7 +43,7 @@ public class CreateCLI
                 bool InputError;
                 do {
                     InputError = false;
-                    Console.WriteLine("Do you want to input the Neurons per Layer in one input(y) or for each Layer a input(n)?(y/n)");
+                    Console.WriteLine("Do you want to input the neurons per layer as a comma-separated list (y) or enter each layer individually (n)? (y/n)");
                     string input = Console.ReadLine() ?? "";
                     if (Extras.IsReturn(input))
                     {
@@ -60,25 +60,39 @@ public class CreateCLI
                         bool KommaError;
                         do {
                             KommaError = false;
-                            Console.Write($"Please type in the neurons per Layer seperated by kommas: ");
+                            Console.Write("Please type in the neurons per Layer seperated by commas: ");
                             string KommasInput = Console.ReadLine() ?? "";
                             if (Extras.IsReturn(KommasInput))
                             {
-                                Console.WriteLine("You will be redirected to the silly question...");
+                                Console.WriteLine("Returning to input method selection...");
                                 InputError = true;
                             }
                             else {
                                 try
                                 {
-                                    int[] LayerArray = KommasInput
+                                    int[] layerArray = KommasInput
                                         .Split(',')
                                         .Select(x => x.Trim())
                                         .Select(x => int.Parse(x))
-                                        .Where(x => x >= 0)
-                                        .Where(x => x <= 10000)
                                         .ToArray();
-                                    if (LayerArray.Length == networkData.Length) {
-                                        networkData = LayerArray;
+                                    if (layerArray.Length != networkData.Length)
+                                    {
+                                        Console.WriteLine($"Expected {networkData.Length} values but received {layerArray.Length}");
+                                        Console.WriteLine("Please try again");
+                                        KommaError = true;
+                                    }
+                                    else if (layerArray.Any(x => x < 0 || x > 10000))
+                                    {
+                                        Console.WriteLine("Each neuron count must be between 0 and 10000");
+                                        Console.WriteLine("Please try again");
+                                        KommaError = true;
+                                    }
+                                    else
+                                    {
+                                        networkData = layerArray;
+                                    }
+                                    if (layerArray.Length == networkData.Length) {
+                                        networkData = layerArray;
                                     }
                                     else
                                     {
