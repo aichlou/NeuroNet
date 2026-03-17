@@ -55,7 +55,7 @@ public class CreateCLI
                         Console.WriteLine("Please type something in");
                         InputError = true;
                     }
-                    else if (input.ToLower() == "y" && input.ToLower() == "yes")
+                    else if (input.ToLower() == "y" || input.ToLower() == "yes")
                     {
                         bool KommaError;
                         do {
@@ -73,7 +73,7 @@ public class CreateCLI
                             }   
                         } while(KommaError);
                     }
-                    else if (input.ToLower() == "n" && input.ToLower() == "no")
+                    else if (input.ToLower() == "n" || input.ToLower() == "no")
                     {
                         networkData = NeuronCountForLayer(networkData);
                         if (networkData[0] == 0) //Network Creation was exited with the Return-Keyword
@@ -81,7 +81,20 @@ public class CreateCLI
                             Error = true;
                         }
                     }
+                    else
+                    {
+                        Console.WriteLine("Please try again");
+                        InputError = true;
+                    }
                 } while (InputError);
+            }
+            else
+            {
+                networkData = NeuronCountForLayer(networkData);
+                if (networkData[0] == 0) //Network Creation was exited with the Return-Keyword
+                {
+                    Error = true;
+                }
             }
         } while (Error);
         

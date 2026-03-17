@@ -161,12 +161,13 @@ internal class Program
                                     else Error = true;
                                 }
                                 else {
-                                double[]? output = runResult.Value  ?? throw new Exception("Network Output cannot be null"); //No Error handeling
+                                double[] output = runResult.Value  ?? throw new Exception("Network Output cannot be null"); //No Error handeling
                                 for(int i = 0; i < output.Length; i++)
                                 {
                                     Console.WriteLine($"Neuron {i + 1}: {output[i]}");
                                 }
                                 }
+                                Error = true;
                                 break;
                             case 2:
                                 Console.WriteLine("This feature is in the working process...");
@@ -208,6 +209,7 @@ internal class Program
                 }
                 while (Error);
             } while (again);
+            Extras.PressKey();
             Console.WriteLine("Returning to Main Menu...");
             Console.WriteLine("------------------------------");
         }

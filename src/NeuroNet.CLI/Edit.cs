@@ -28,7 +28,7 @@ class EditCLI
             Error = false;
             Console.WriteLine("Edit neural network");
             Console.WriteLine("What do you want to do?");
-            Console.WriteLine("1. Randomize weights");
+            Console.WriteLine("1. Randomize all weights");
             Console.WriteLine("2. Edit weights manually");
             Console.WriteLine("3. Edit number of layers & neurons");
             Console.WriteLine("4. Edit name of the network");
