@@ -10,6 +10,7 @@ public class Create {
         for (int i = 0; i < layers; i++) 
         {
             int neuronCount = networkData[i + 1];
+            if (neuronCount <= 0) throw new Exception("Number of Neurons in one Layer cannot be zero or lower");
             network.Add(new List<Neuron>());
 
             for (int j = 0; j < neuronCount; j++)

@@ -43,7 +43,7 @@ public class CreateCLI
                 bool InputError;
                 do {
                     InputError = false;
-                    Console.WriteLine("Do you want to give the Neurons per Layer in one input or for each Layer a input?(y/n)");
+                    Console.WriteLine("Do you want to input the Neurons per Layer in one input(y) or for each Layer a input(n)?(y/n)");
                     string input = Console.ReadLine() ?? "";
                     if (Extras.IsReturn(input))
                     {
@@ -62,28 +62,37 @@ public class CreateCLI
                             KommaError = false;
                             Console.Write($"Please type in the neurons per Layer seperated by kommas: ");
                             string KommasInput = Console.ReadLine() ?? "";
-                            try
+                            if (Extras.IsReturn(KommasInput))
                             {
-                                int[] LayerArray = KommasInput
-                                    .Split(',')
-                                    .Select(x => x.Trim())
-                                    .Select(x => int.Parse(x))
-                                    .ToArray();
-                                if (LayerArray.Length == networkData.Length) {
-                                    networkData = LayerArray;
-                                }
-                                else
+                                Console.WriteLine("You will be redirected to the silly question...");
+                                InputError = true;
+                            }
+                            else {
+                                try
                                 {
-                                    Console.WriteLine("The number of your inputs does not match the number of layers");
-                                    Console.WriteLine("Please try again");
+                                    int[] LayerArray = KommasInput
+                                        .Split(',')
+                                        .Select(x => x.Trim())
+                                        .Select(x => int.Parse(x))
+                                        .Where(x => x >= 0)
+                                        .Where(x => x <= 10000)
+                                        .ToArray();
+                                    if (LayerArray.Length == networkData.Length) {
+                                        networkData = LayerArray;
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("The number of your inputs does not match the number of layers");
+                                        Console.WriteLine("Please try again");
+                                        KommaError = true;
+                                    }
+                                }
+                                catch(Exception)
+                                {
+                                    Console.WriteLine("Please insert a valid Input");
                                     KommaError = true;
                                 }
                             }
-                            catch(Exception e)
-                            {
-                                Console.WriteLine("Please insert a valid Input");
-                                KommaError = true;
-                            }   
                         } while(KommaError);
                     }
                     else if (input.ToLower() == "n" || input.ToLower() == "no")
