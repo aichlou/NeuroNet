@@ -242,47 +242,88 @@ class EditCLI
             else if (layerNumber > network.Count)
             {
                 Console.WriteLine($"The Layer {layerNumber} is not a valid Layer because the network is just {network.Count} layers large");
-                Console.WriteLine($"Do you want to add {layerNumber - network.Count} layers?(y/n)");
-                string AddLayers = Console.ReadLine() ?? "".ToLower();
-                if (AddLayers == "y" || AddLayers == "yes")
-                {
-                    if (layerNumber - network.Count == 1)
+                if (layerNumber - network.Count < 10) {
+                    Console.WriteLine($"Do you want to add {layerNumber - network.Count} layers?(y/n)");
+                    string AddLayers = Console.ReadLine() ?? "".ToLower();
+                    if (AddLayers == "y" || AddLayers == "yes")
                     {
-                        Console.WriteLine("Creating new layer...");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Creating new layers...");
-                        int[] NewLayers = new int[layerNumber - network.Count];
-                        for(int i = network.Count; i < layerNumber; i++)
+                        if (layerNumber - network.Count == 1)
                         {
-                            bool StringError = false;
-                            while (StringError) {
-                                Console.WriteLine($"How many neurons do you want in Layer {i}");
-                                string NeuronsSting = Console.ReadLine() ?? "";
-                                if (int.TryParse(NeuronsSting, out int result))
+                            bool NeuronError = false;
+                            do {
+                                NeuronError = false;
+                                Console.WriteLine("How many layers do you want in the layer?");
+                                string input = Console.ReadLine() ?? "";
+                                if (int.TryParse(input, out int NeuronAmount) && NeuronAmount < 0)
                                 {
-                                    NewLayers[i - network.Count] = result;
-                                    StringError = false;
-                                }
-                                else if (Extras.IsReturn(NeuronsSting))
-                                {
-                                    Console.WriteLine("Returning isnt availble here");
-                                    StringError = true;
+                                    if (NeuronAmount < 10000)
+                                    {
+                                        Console.WriteLine("Creating new layer...");
+                                        network = Edit.AddLayers(network, [NeuronAmount]);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("There cannot be more then 10000 Neurons in one layer...");
+                                        NeuronError = true;
+                                    }
                                 }
                                 else
                                 {
-                                    Console.WriteLine("Please type in a vald number");
-                                    StringError = true;
+                                    Console.WriteLine("Please type in a valid number");
+                                    NeuronError = true;
+                                }
+                            } while (NeuronError);
+                        }
+                        else
+                        {
+                            int[] NewLayers = new int[layerNumber - network.Count];
+                            for(int i = network.Count; i < layerNumber; i++)
+                            {
+                                bool StringError = true;
+                                while (StringError) {
+                                    StringError = false;
+                                    Console.WriteLine($"How many neurons do you want in Layer {i}");
+                                    string NeuronsSting = Console.ReadLine() ?? "";
+                                    if (int.TryParse(NeuronsSting, out int result) && result > 0)
+                                    { 
+                                        if (result < 10000) {
+                                            NewLayers[i - network.Count] = result;
+                                            StringError = false;
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("You cannot put more then 10000 Neurons in one Layer");
+                                            Console.WriteLine("Please try again");
+                                            StringError = true;
+                                        }
+                                    }
+                                    else if (Extras.IsReturn(NeuronsSting))
+                                    {
+                                        Console.WriteLine("Returning isnt availble here");
+                                        StringError = true;
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Please type in a vald number");
+                                        StringError = true;
+                                    }
                                 }
                             }
+                            Console.WriteLine("Creating new layers...");
+                            network = Edit.AddLayers(network, NewLayers);
                         }
                     }
-                    
+                    else
+                    {
+                        Console.WriteLine($"Then please select a valid layer (1-{network.Count})");
+                        Error = true;
+                    }
                 }
                 else
                 {
-                    
+                    Console.WriteLine("You cannot add more then 10 Layers at once");
+                    Console.WriteLine("Please try again");
+                    Error = true;
                 }
             }
             else
@@ -293,8 +334,8 @@ class EditCLI
                 do {
                     NeuronError = false;
                     Console.WriteLine($"This layer has {network[layerNumber - 1].Count} neurons.");
-                    Console.WriteLine("Enter the neuron number of the layer you want to edit:");
-                    string? neuronInput = Console.ReadLine();
+                    Console.WriteLine("Enter the neuron number of the layer you want to edit"); //Todo: Add e for editing the whole layer for things like delete, change position in network, name,etc
+                    string neuronInput = Console.ReadLine() ?? "";
                     if (!int.TryParse(neuronInput, out int neuronNumber) || neuronNumber < 1 || neuronNumber > network[layerNumber - 1].Count)
                     {
                         if (Extras.IsReturn(neuronInput))
@@ -302,8 +343,9 @@ class EditCLI
                             Console.WriteLine("Returning to Layer Selection...");
                             Error = true;
                         }
+                        //else if (neuronInput.ToLower() == "d" || neuronInput.ToLower() == "delete") {}
                         else {
-                            Console.WriteLine("Invalid neuron number.");
+                            Console.WriteLine("Please type in a valid number");
                             NeuronError = true;
                         }
                     }
@@ -400,7 +442,9 @@ class EditCLI
                                         }
                                         else
                                         {
-                                            Console.WriteLine("This neuron doesn't exist, please choose one, who exists");
+                                            Console.WriteLine($"The neuron {WeightNumber} is not a valid Layer because the layer is contains just {weights.Length}");
+                                            Console.WriteLine($"Do you want to create {WeightNumber - weights.Length} neurons?");
+                                            //WEITER MACHEN
                                             WeightsError = true;
                                         }
                                     }
