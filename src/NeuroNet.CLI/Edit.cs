@@ -124,9 +124,9 @@ class EditCLI
                         Console.WriteLine("Weights randomized and saved to file");
                         break;
                     case 2:
-                        Console.WriteLine("Me (the developer) don't recommend to change the Weights here...");
-                        Console.WriteLine("I personally would wait until the v.0.4.0 - Graphical Update comes and edit the weights then...");
-                        Console.WriteLine("But I wish you good Luck");
+                    case 3:
+                        Console.WriteLine("You can manually change weights, neurons or layers in this menu");
+                        //Console.WriteLine("I personally would wait until the v.0.4.0 - Graphical Update comes and edit then");
                         Console.WriteLine();
                         MultipleValues<List<List<Neuron>>> EditWeightsResult = EditCLI.EditWeightsManually(network);
                         if (EditWeightsResult.HasError)
@@ -148,26 +148,6 @@ class EditCLI
                         {
                             SaveCLI.SaveNetworkToFileY(network, "overwrite", currentnnName);
                         } 
-                        break;
-                    case 3:
-                        network = network ?? throw new Exception("Network cannot be null");
-                        MultipleValues<List<List<Neuron>>> EditNetworkResult = EditCLI.NumberLayerNeurons(network);
-                        Error = EditNetworkResult.HasError;
-                        if (Error)
-                        {
-                            if (EditNetworkResult.ErrorMessage == Program.returnString)
-                            {
-                                Console.WriteLine("Returning to Edit Menu...");
-                                Error = true;
-                                break;
-                            }
-                            Console.WriteLine("Error editing weights: " + EditNetworkResult.ErrorMessage);
-                            Console.WriteLine("Please repeat the process");
-                            Error = true;
-                            break;
-                        }
-                        network = EditNetworkResult.Value ?? throw new Exception("Unexpected null value for network after editing weights.");
-                        SaveCLI.SaveNetworkToFileY(network, "overwrite", currentnnName);
                         break;
                     case 4:
                         string result = ChangeName(currentnnName);
@@ -244,7 +224,7 @@ class EditCLI
             Error = false;
             Console.WriteLine("Enter the layer number of the weight you want to edit:");
             string? layerInput = Console.ReadLine();
-            if (!int.TryParse(layerInput, out int layerNumber) || layerNumber < 1 || layerNumber > network.Count)
+            if (!int.TryParse(layerInput, out int layerNumber) || layerNumber < 1)
             {
                 if (Extras.IsReturn(layerInput))
                 {
@@ -258,6 +238,52 @@ class EditCLI
                 }
                 Console.WriteLine("Invalid layer number.");
                 Error = true;
+            }
+            else if (layerNumber > network.Count)
+            {
+                Console.WriteLine($"The Layer {layerNumber} is not a valid Layer because the network is just {network.Count} layers large");
+                Console.WriteLine($"Do you want to add {layerNumber - network.Count} layers?(y/n)");
+                string AddLayers = Console.ReadLine() ?? "".ToLower();
+                if (AddLayers == "y" || AddLayers == "yes")
+                {
+                    if (layerNumber - network.Count == 1)
+                    {
+                        Console.WriteLine("Creating new layer...");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Creating new layers...");
+                        int[] NewLayers = new int[layerNumber - network.Count];
+                        for(int i = network.Count; i < layerNumber; i++)
+                        {
+                            bool StringError = false;
+                            while (StringError) {
+                                Console.WriteLine($"How many neurons do you want in Layer {i}");
+                                string NeuronsSting = Console.ReadLine() ?? "";
+                                if (int.TryParse(NeuronsSting, out int result))
+                                {
+                                    NewLayers[i - network.Count] = result;
+                                    StringError = false;
+                                }
+                                else if (Extras.IsReturn(NeuronsSting))
+                                {
+                                    Console.WriteLine("Returning isnt availble here");
+                                    StringError = true;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Please type in a vald number");
+                                    StringError = true;
+                                }
+                            }
+                        }
+                    }
+                    
+                }
+                else
+                {
+                    
+                }
             }
             else
             {

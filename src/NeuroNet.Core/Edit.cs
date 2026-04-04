@@ -78,4 +78,20 @@ public class Edit
             return $"Error: Invalid JSON format - {ex.Message}";
         }
     }
+
+    public static List<List<Neuron>> AddLayers (List<List<Neuron>> network, int[] LayerCount)
+    {
+        for(int i = 0; i < LayerCount.Count(); i++)
+        {
+            List<Neuron> Layer = new List<Neuron>(LayerCount[i]);
+            double[] emptyWeights = new double[network[network.Count - 1].Count];
+            foreach (Neuron neuron in Layer) {
+                neuron.SetWeights(emptyWeights);
+                Random rand = new Random();
+                neuron.RandomizeWeights(rand);
+            }
+            network.Add(Layer);
+        }
+        return network;
+    }
 }
