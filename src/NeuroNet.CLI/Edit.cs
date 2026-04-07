@@ -443,8 +443,11 @@ class EditCLI
                                         else
                                         {
                                             Console.WriteLine($"The neuron {WeightNumber} is not a valid Layer because the layer is contains just {weights.Length}");
-                                            Console.WriteLine($"Do you want to create {WeightNumber - weights.Length} neurons?");
-                                            //WEITER MACHEN
+                                            Console.WriteLine($"Do you want to create {WeightNumber - weights.Length} neurons?(y/n)");
+                                            var state = InputCLI.ConfirmAndReturn();
+                                            if (state == InputCLI.TriState.True) { }//Create neurons
+                                            else if (state == InputCLI.TriState.False) {} //Don't create neurons
+                                            else if (state == InputCLI.TriState.Return) {} //Return
                                             WeightsError = true;
                                         }
                                     }
