@@ -3,11 +3,20 @@ using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 using System.Xml;
 using NeuroNet.Core;
+using NeuroNet.CLI;
+using Microsoft.VisualBasic;
 
-namespace NeuroNet.CLI;
+var result =InputCLI.ConfirmInputReturn();
+if (result.Value1 == InputCLI.TriState.True) Console.WriteLine("This is Valid");
+else if (result.Value1 == InputCLI.TriState.False) Console.WriteLine("This isn't Valid");
+else if (result.Value1 == InputCLI.TriState.Return) Console.WriteLine("Return");
+
+
+
 
 public class InputCLI
 {
+
     public enum TriState
     {
         True, False, Return
@@ -24,10 +33,20 @@ public class InputCLI
         else if (Config.StartsWith("numbers"))
         {
             string End = Config.Substring("numbers".Length);
-            int SecondNumber = Convert.ToInt32(End
-                .Substring(End.IndexOf(',')));
-            int FirstNumber = Convert.ToInt32(End
-                .Remove(End.Length - End.IndexOf(',')));
+            int SecondNumber;
+            int FirstNumber;
+            try {
+                SecondNumber = Convert.ToInt32(End
+                    .Substring(End.IndexOf(',') + 1));
+                FirstNumber = Convert.ToInt32(End
+                    .Remove(End.IndexOf(',') - 1));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine("The configuration numbers is wrong. It is not guaranteed that the program will continue the right way. Please report an Issue on GitHub");
+                return TriState.Return;
+            }
             int IntInput;
             try { IntInput = Convert.ToInt32(Input); }
             catch { return TriState.False; }
