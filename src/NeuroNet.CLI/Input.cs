@@ -22,6 +22,13 @@ public class InputCLI
     {
         True, False, Return
     }
+    /// <summary>
+    /// Gets an Input from the Console and returns if the input matches one of the given Values
+    /// </summary>
+    /// <param name="Values">Matching Values</param>
+    /// <param name="Input">Input from the Console</param>
+    /// <param name="Config">Preconfigured kit</param>
+    /// <returns>TriState True, False or Return</returns>
     public static TriState ConfirmAndReturn(string[]? Values = null, string? Input = null, string? Config = null)
     {
         if (Input == null) Input = Console.ReadLine() ?? "";

@@ -1,5 +1,7 @@
+using System.Security.Cryptography;
 using NeuroNet.Core;
 using Spectre.Console;
+using static NeuroNet.CLI.InputCLI;
 
 namespace NeuroNet.CLI;
 
@@ -33,11 +35,10 @@ class EditCLI
             Console.WriteLine("3. Edit number of layers & neurons");
             Console.WriteLine("4. Edit name of the network");
             Console.WriteLine("5. Return to main menu");
-            string UserOutputString = Console.ReadLine() ?? string.Empty;
-            if (!int.TryParse(UserOutputString, out int UserOutput))
+            var Result = InputCLI.ConfirmInputReturn(["1", "2", "3", "4"]);
+            switch (Result.Value1)
             {
-                if (Extras.IsReturn(UserOutputString))
-                {
+                case TriState.Return:
                     Console.WriteLine("Returning to Main Menu...");
                     return new MultipleValues<TwoValues<List<List<Neuron>>, string?>>
                     {
@@ -49,149 +50,146 @@ class EditCLI
                         },
                         ErrorMessage = Program.returnString,
                     };
-                }
-                Console.WriteLine("Please insert a valid number");
-                Error = true;
-            }
-            else
-            {
-                network = network ?? throw new Exception("Network cannot be null");
-                switch (UserOutput)
-                {
-                    case 1:
-                        bool RangeError = false;
-                        do {
-                            Console.WriteLine("Do you want to use the default(-1 to 1) Range or a customized? (d/c)");
-                            string input = Console.ReadLine() ?? "";
-                            if (input.Trim() == "") {
-                                Console.WriteLine("Please trype something in...");
-                                RangeError = true;
-                            }
-                            else if (Extras.IsReturn(input))
-                            {
-                                Error = true;
-                            }
-                            else if (input.ToLower() == "d")
-                            {
-                                network = Edit.RandomizeWeights(network);
-                            }
-                            else if (input.ToLower() == "c")
-                            {
-                                bool CustomError;
-                                do {
-                                    CustomError = false;
-                                    Console.WriteLine("Please type in the Range in the [lower, upper]-Format");
-                                    try {
-                                        string RangeInput = Console.ReadLine() ?? "";
-                                        if (Extras.IsReturn(RangeInput)) RangeError = true;
-                                        double LowerBorder = double.Parse(RangeInput
-                                            .Reverse()
-                                            .SkipWhile(c => c != ',')
-                                            .Skip(1)
-                                            .Reverse()
-                                            .ToArray() ?? throw new Exception("Lower border could not be resolved"));
-                                        double UpperBorder = double.Parse(RangeInput
-                                            .SkipWhile(c => c != ',')
-                                            .Skip(1)
-                                            .ToArray() ?? throw new Exception("Upper border could not be resolved"));
-                                        if (LowerBorder >= UpperBorder)
-                                        {
-                                            Console.WriteLine("The Lower Border should be smaller than the Upper Border");
-                                            Console.WriteLine("Please try again");
-                                            CustomError = true;
+                case TriState.False:
+                    Console.WriteLine("Please insert a valid entry");
+                    break;
+                case TriState.True:
+                    switch (Result.Value2)
+                    {
+                        case "1":
+                            bool RangeError = false;
+                            do {
+                                Console.WriteLine("Do you want to use the default(-1 to 1) Range or a customized? (d/c)");
+                                var DefOrCu = ConfirmInputReturn(["d", "D"]);
+                                switch(DefOrCu.Value1)
+                                {
+                                    case TriState.Return:
+                                        Console.WriteLine("Returning...");
+                                        RangeError = true;
+                                        break;
+                                    case TriState.True:
+                                        network = Edit.RandomizeWeights(network);
+                                        break;
+                                    case TriState.False:
+                                        if ((DefOrCu.Value2 ?? "").ToLower() == "c") {
+                                            bool CustomError;
+                                            do {
+                                                CustomError = false;
+                                                Console.WriteLine("Please type in the Range in the [lower, upper]-Format");
+                                                try {
+                                                    string RangeInput = Console.ReadLine() ?? "";
+                                                    if (Extras.IsReturn(RangeInput)) RangeError = true;
+                                                    double LowerBorder = double.Parse(RangeInput
+                                                        .Reverse()
+                                                        .SkipWhile(c => c != ',')
+                                                        .Skip(1)
+                                                        .Reverse()
+                                                        .ToArray() ?? throw new Exception("Lower border could not be resolved"));
+                                                    double UpperBorder = double.Parse(RangeInput
+                                                        .SkipWhile(c => c != ',')
+                                                        .Skip(1)
+                                                        .ToArray() ?? throw new Exception("Upper border could not be resolved"));
+                                                    if (LowerBorder >= UpperBorder)
+                                                    {
+                                                        Console.WriteLine("The Lower Border should be smaller than the Upper Border");
+                                                        Console.WriteLine("Please try again");
+                                                        CustomError = true;
+                                                    }
+                                                    else
+                                                    {
+                                                        network = Edit.RandomizeWeights(network, LowerBorder, UpperBorder);
+                                                    }
+                                                }
+                                                catch (Exception c)
+                                                {
+                                                    Console.WriteLine($"Something went wrong: {c.Message}");
+                                                    Console.WriteLine("Please try again");
+                                                    CustomError = true;
+                                                }
+                                            } while (CustomError);
                                         }
                                         else
                                         {
-                                            network = Edit.RandomizeWeights(network, LowerBorder, UpperBorder);
+                                            Console.WriteLine("This isn't a valid Input. Please try again...");
+                                            RangeError = true;
                                         }
-                                    }
-                                    catch (Exception c)
-                                    {
-                                        Console.WriteLine($"Something went wrong: {c.Message}");
-                                        Console.WriteLine("Please try again");
-                                        CustomError = true;
-                                    }
-                                } while (CustomError);
-                            }
-                            else
+                                        break;
+                                }
+                            } while (RangeError);
+                            SaveCLI.SaveNetworkToFileY(network, "overwrite", currentnnName);
+                            ShowCLI.ShowNetwork(network);
+                            Console.WriteLine("Weights randomized and saved to file");
+                            break; //Continue here
+                        case "2":
+                        case "3":
+                            Console.WriteLine("You can manually change weights, neurons or layers in this menu");
+                            //Console.WriteLine("I personally would wait until the v.0.4.0 - Graphical Update comes and edit then");
+                            Console.WriteLine();
+                            MultipleValues<List<List<Neuron>>> EditWeightsResult = EditCLI.EditWeightsManually(network);
+                            if (EditWeightsResult.HasError)
                             {
-                                Console.WriteLine("This is no valid Input. Please try again.");
-                                RangeError = true;
-                            }
-                        } while (RangeError);
-                        SaveCLI.SaveNetworkToFileY(network, "overwrite", currentnnName);
-                        ShowCLI.ShowNetwork(network);
-                        Console.WriteLine("Weights randomized and saved to file");
-                        break;
-                    case 2:
-                    case 3:
-                        Console.WriteLine("You can manually change weights, neurons or layers in this menu");
-                        //Console.WriteLine("I personally would wait until the v.0.4.0 - Graphical Update comes and edit then");
-                        Console.WriteLine();
-                        MultipleValues<List<List<Neuron>>> EditWeightsResult = EditCLI.EditWeightsManually(network);
-                        if (EditWeightsResult.HasError)
-                        {
-                            if (EditWeightsResult.ErrorMessage == Program.returnString)
-                            {
-                                Console.WriteLine("Returning to Edit Menu...");
+                                if (EditWeightsResult.ErrorMessage == Program.returnString)
+                                {
+                                    Console.WriteLine("Returning to Edit Menu...");
+                                    Error = true;
+                                    break;
+                                }
+                                Console.WriteLine("Error editing weights: " + EditWeightsResult.ErrorMessage);
+                                Console.WriteLine("Please repeat the process");
                                 Error = true;
                                 break;
                             }
-                            Console.WriteLine("Error editing weights: " + EditWeightsResult.ErrorMessage);
-                            Console.WriteLine("Please repeat the process");
+                            network = EditWeightsResult.Value ?? throw new Exception("Unexpected null value for network after editing weights.");
+                            Error = EditWeightsResult.HasError;
+                            if (!Error)
+                            {
+                                SaveCLI.SaveNetworkToFileY(network, "overwrite", currentnnName);
+                            } 
+                            break;
+                        case "4":
+                            string result = ChangeName(currentnnName);
+                            if (result == "Error") Error = true;
+                            else currentnnName = result;
+                            break;
+                        case "5":
+                            return new MultipleValues<TwoValues<List<List<Neuron>>, string?>>
+                            {
+                                HasError = true,
+                                Value = new TwoValues<List<List<Neuron>>, string?>
+                                {
+                                    Value1 = network,
+                                    Value2 = currentnnName,
+                                },
+                            };
+                        default:
+                            Console.WriteLine("Please insert one of the shown Options");
                             Error = true;
                             break;
+                    }
+                    if (!Error) {
+                        Console.WriteLine("Do you want to Edit further? (y/n)");
+                        string UserInput = Console.ReadLine() ?? "";
+                        if (Extras.IsReturn(UserInput))
+                        {
+                            //Todo: I dont want to do this
+                            Console.WriteLine("This isn't implemented yet so you will be redirected to the main menu...");
                         }
-                        network = EditWeightsResult.Value ?? throw new Exception("Unexpected null value for network after editing weights.");
-                        Error = EditWeightsResult.HasError;
-                        if (!Error)
+                        else if (UserInput.ToLower() == "y")
                         {
-                            SaveCLI.SaveNetworkToFileY(network, "overwrite", currentnnName);
-                        } 
-                        break;
-                    case 4:
-                        string result = ChangeName(currentnnName);
-                        if (result == "Error") Error = true;
-                        else currentnnName = result;
-                        break;
-                    case 5:
-                        return new MultipleValues<TwoValues<List<List<Neuron>>, string?>>
+                            //Console.WriteLine("Really? You want to stay in my shi**y menu?");
+                            Console.WriteLine("On the way to the Edit menu...");
+                            Error = true;
+                        }
+                        else if (UserInput.ToLower() == "n")
                         {
-                            HasError = true,
-                            Value = new TwoValues<List<List<Neuron>>, string?>
-                            {
-                                Value1 = network,
-                                Value2 = currentnnName,
-                            },
-                        };
-                    default:
-                        Console.WriteLine("Please insert one of the shown Options");
-                        Error = true;
-                        break;
-                }
-                if (!Error) {
-                    Console.WriteLine("Do you want to Edit further? (y/n)");
-                    string UserInput = Console.ReadLine() ?? "";
-                    if (Extras.IsReturn(UserInput))
-                    {
-                        //Todo: I dont want to do this
-                        Console.WriteLine("This isn't implemented yet so you will be redirected to the main menu...");
+                            Console.WriteLine("You will be redirected to the main menu...");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Okay... I guess you don't want to stay here...");
+                        }
                     }
-                    else if (UserInput.ToLower() == "y")
-                    {
-                        //Console.WriteLine("Really? You want to stay in my shi**y menu?");
-                        Console.WriteLine("On the way to the Edit menu...");
-                        Error = true;
-                    }
-                    else if (UserInput.ToLower() == "n")
-                    {
-                        Console.WriteLine("You will be redirected to the main menu...");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Okay... I guess you don't want to stay here...");
-                    }
-                }
+                    break;
             }
         } while (Error);
 
