@@ -3,13 +3,14 @@ using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 using System.Xml;
 using NeuroNet.Core;
-using NeuroNet.CLI;
+//using NeuroNet.CLI;
 using Microsoft.VisualBasic;
 
-var result =InputCLI.ConfirmInputReturn();
+namespace NeuroNet.CLI;
+/*var result =InputCLI.ConfirmInputReturn();
 if (result.Value1 == InputCLI.TriState.True) Console.WriteLine("This is Valid");
 else if (result.Value1 == InputCLI.TriState.False) Console.WriteLine("This isn't Valid");
-else if (result.Value1 == InputCLI.TriState.Return) Console.WriteLine("Return");
+else if (result.Value1 == InputCLI.TriState.Return) Console.WriteLine("Return"); */
 
 
 
@@ -33,24 +34,12 @@ public class InputCLI
         else if (Config.StartsWith("numbers"))
         {
             string End = Config.Substring("numbers".Length);
-            int SecondNumber;
-            int FirstNumber;
-            try {
-                SecondNumber = Convert.ToInt32(End
-                    .Substring(End.IndexOf(',') + 1));
-                FirstNumber = Convert.ToInt32(End
-                    .Remove(End.IndexOf(',') - 1));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                Console.WriteLine("The configuration numbers is wrong. It is not guaranteed that the program will continue the right way. Please report an Issue on GitHub");
-                return TriState.Return;
-            }
+            int SecondNumber = End.ToCharArray().Last() == ',' ? int.MaxValue : Convert.ToInt32(End.Substring(End.IndexOf(',') + 1));
+            int FirstNumber = End.ToCharArray().Last() == ',' ? int.MinValue : Convert.ToInt32(End.Remove(End.IndexOf(',') - 1));
             int IntInput;
             try { IntInput = Convert.ToInt32(Input); }
-            catch { return TriState.False; }
-            return IntInput > FirstNumber && IntInput < SecondNumber ? TriState.True : TriState.False;
+            catch { return ConfirmAndReturn(Values, Input); }
+            return IntInput > FirstNumber && IntInput < SecondNumber ? TriState.True : ConfirmAndReturn(Values, Input);
         }
         else
         {
