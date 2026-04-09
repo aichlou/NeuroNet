@@ -12,11 +12,11 @@ public class Edit
         {
             for (int j = 0; j < network[i].Count; j++)
             {
-                if(network[i][j].weights.All(x => x != 0))
+                if(network[i][j].GetWeights().All(x => x != 0))
                 {
                     return false;
                 }
-                if(network[i][j].bias != 0)
+                if(network[i][j].GetBias() != 0)
                 {
                     return false;
                 }
@@ -31,9 +31,9 @@ public class Edit
         Random rand = new Random();
         for (int i = 0; i < network.Count; i++)
         {
-            for (int j = 0; j < network[i].Count; j++)
+            foreach (Neuron neuron in network[i])
             {
-                network[i][j].RandomizeWeights(rand, minValue, maxValue);
+                neuron.RandomizeWeights(rand, minValue, maxValue);
             }
         }
         return network;

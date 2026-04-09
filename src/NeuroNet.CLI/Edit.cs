@@ -31,10 +31,9 @@ class EditCLI
             Console.WriteLine("Edit neural network");
             Console.WriteLine("What do you want to do?");
             Console.WriteLine("1. Randomize all weights");
-            Console.WriteLine("2. Edit weights manually");
-            Console.WriteLine("3. Edit number of layers & neurons");
-            Console.WriteLine("4. Edit name of the network");
-            Console.WriteLine("5. Return to main menu");
+            Console.WriteLine("2. Edit weights, neurons and layers manually");
+            Console.WriteLine("3. Edit name of the network");
+            Console.WriteLine("4. Return to main menu");
             var Result = InputCLI.ConfirmInputReturn(["1", "2", "3", "4"]);
             switch (Result.Value1)
             {
@@ -119,9 +118,8 @@ class EditCLI
                             SaveCLI.SaveNetworkToFileY(network, "overwrite", currentnnName);
                             ShowCLI.ShowNetwork(network);
                             Console.WriteLine("Weights randomized and saved to file");
-                            break; //Continue here
+                            break;
                         case "2":
-                        case "3":
                             Console.WriteLine("You can manually change weights, neurons or layers in this menu");
                             //Console.WriteLine("I personally would wait until the v.0.4.0 - Graphical Update comes and edit then");
                             Console.WriteLine();
@@ -146,12 +144,12 @@ class EditCLI
                                 SaveCLI.SaveNetworkToFileY(network, "overwrite", currentnnName);
                             } 
                             break;
-                        case "4":
+                        case "3":
                             string result = ChangeName(currentnnName);
                             if (result == "Error") Error = true;
                             else currentnnName = result;
                             break;
-                        case "5":
+                        case "4":
                             return new MultipleValues<TwoValues<List<List<Neuron>>, string?>>
                             {
                                 HasError = true,
@@ -168,25 +166,21 @@ class EditCLI
                     }
                     if (!Error) {
                         Console.WriteLine("Do you want to Edit further? (y/n)");
-                        string UserInput = Console.ReadLine() ?? "";
-                        if (Extras.IsReturn(UserInput))
+                        var UserInput = InputCLI.ConfirmAndReturn();
+                        if (UserInput == TriState.Return)
                         {
                             //Todo: I dont want to do this
-                            Console.WriteLine("This isn't implemented yet so you will be redirected to the main menu...");
+                            Console.WriteLine("This isn't implemented so you will be redirected to the main menu...");
                         }
-                        else if (UserInput.ToLower() == "y")
+                        else if (UserInput == TriState.True)
                         {
                             //Console.WriteLine("Really? You want to stay in my shi**y menu?");
                             Console.WriteLine("On the way to the Edit menu...");
                             Error = true;
                         }
-                        else if (UserInput.ToLower() == "n")
+                        else if (UserInput == TriState.False)
                         {
                             Console.WriteLine("You will be redirected to the main menu...");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Okay... I guess you don't want to stay here...");
                         }
                     }
                     break;
@@ -333,130 +327,134 @@ class EditCLI
                     NeuronError = false;
                     Console.WriteLine($"This layer has {network[layerNumber - 1].Count} neurons.");
                     Console.WriteLine("Enter the neuron number of the layer you want to edit"); //Todo: Add e for editing the whole layer for things like delete, change position in network, name,etc
-                    string neuronInput = Console.ReadLine() ?? "";
-                    if (!int.TryParse(neuronInput, out int neuronNumber) || neuronNumber < 1 || neuronNumber > network[layerNumber - 1].Count)
+                    var NeuronState = InputCLI.ConfirmInputReturn(["e"], $"numbers1,{network[layerNumber - 1].Count - 1}");
+                    switch (NeuronState.Value1)
                     {
-                        if (Extras.IsReturn(neuronInput))
-                        {
+                        case TriState.Return:
                             Console.WriteLine("Returning to Layer Selection...");
                             Error = true;
-                        }
-                        //else if (neuronInput.ToLower() == "d" || neuronInput.ToLower() == "delete") {}
-                        else {
-                            Console.WriteLine("Please type in a valid number");
-                            NeuronError = true;
-                        }
-                    }
-                    else
-                    {
-                        Neuron selectedNeuron = network[layerNumber - 1][neuronNumber - 1];
-                        bool WeightsError = false;
-                        do {
-                            WeightsError = false;
-                            double[] weights = selectedNeuron.GetWeights();
-                            Console.WriteLine($"Current weights: {string.Join(", ", weights.Select(w => w.ToString("F3")))}");
-                            Console.WriteLine("Which weight do you want to change? (Type in 'all' if you want to change all)");
-                            string UserOutput = Console.ReadLine() ?? "";
-                            if (Extras.IsReturn(UserOutput))
-                            {
-                                Console.WriteLine("Redirecting to Neuron Choice...");
+                            break;
+                        case TriState.False:
+                            if (!int.TryParse(NeuronState.Value2, out int WeightNumber2)) {
+                                Console.WriteLine("Please type in a valid number");
                                 NeuronError = true;
                             }
                             else
                             {
-                                if (UserOutput.ToLower() == "all")
-                                {   
-                                    bool AllWeightsError = false;
-                                    do {
-                                        AllWeightsError = false;
-                                        Console.WriteLine("Please type in the new weights seperated by commas");
-                                        string NewWeights = Console.ReadLine() ?? "";
-                                        if (NewWeights == "")
-                                        {
-                                            Console.WriteLine("Please type in something");
-                                            AllWeightsError = true;
-                                        }
-                                        else if (Extras.IsReturn(NewWeights))
-                                        {
-                                            Console.WriteLine("Returning to Neuron Choice...");
+                                double[] weights = network[layerNumber - 1][WeightNumber2 - 1].GetWeights();
+                                Console.WriteLine($"The neuron {WeightNumber2} is not a valid Layer because the layer is contains just {weights.Length}");
+                                Console.WriteLine($"Do you want to create {WeightNumber2 - weights.Length} neurons?(y/n)");
+                                var state = InputCLI.ConfirmAndReturn();
+                                if (state == InputCLI.TriState.True) { }//Create neurons
+                                else if (state == InputCLI.TriState.False) {} //Don't create neurons
+                                else if (state == InputCLI.TriState.Return) {} //Return
+                            }
+                            break;
+                        case TriState.True:
+                            if(int.TryParse(NeuronState.Value2, out int neuronNumber))
+                            {
+                                Neuron selectedNeuron = network[layerNumber - 1][neuronNumber - 1];
+                                bool WeightsError = false;
+                                do {
+                                    WeightsError = false;
+                                    double[] weights = selectedNeuron.GetWeights();
+                                    Console.WriteLine($"Current weights: {string.Join(", ", weights.Select(w => w.ToString("F3")))}");
+                                    Console.WriteLine("Which weight do you want to change? (Type in 'all' if you want to change all)");
+                                    var WeightState = InputCLI.ConfirmInputReturn(["all", "a"], $"numbers1,{weights.Length}"); //Todo: Check if begin from 0 is valid
+                                    switch (WeightState.Value1)
+                                    {
+                                        case TriState.Return:
+                                            Console.WriteLine("Redirecting to Neuron Choice...");
                                             NeuronError = true;
-                                        }
-                                        else
-                                        {
-                                            string[] StringWeights = NewWeights.Split(',');
-
-                                            if (StringWeights.All(w => double.TryParse(w, out _)))
+                                            break;
+                                        case TriState.False:
+                                            Console.WriteLine("Please type in a valid number or 'all'");
+                                            WeightsError = true;
+                                            break;
+                                        case TriState.True:
+                                            if (WeightState.Value2 == "all" || WeightState.Value2 == "a")
                                             {
-                                                double[] doubleWeights = StringWeights.Select(w => double.Parse(w)).ToArray();
-                                                if (doubleWeights.Length == selectedNeuron.GetWeights().Length)
-                                                {
-                                                    selectedNeuron.SetWeights(doubleWeights);
-                                                    Console.WriteLine("Succesfully changed Neurons Weights");
-                                                }
-                                                else
-                                                {
-                                                    Console.WriteLine($"Please insert {selectedNeuron.GetWeights().Length} weights");
-                                                    AllWeightsError = true;
-                                                }
+                                                bool AllWeightsError = false;
+                                                do {
+                                                    AllWeightsError = false;
+                                                    Console.WriteLine("Please type in the new weights seperated by commas"); //Todo: Maybe implement configuration for inputCLI for this
+                                                    string NewWeights = Console.ReadLine() ?? "";
+                                                    if (NewWeights == "")
+                                                    {
+                                                        Console.WriteLine("Please type in something");
+                                                        AllWeightsError = true;
+                                                    }
+                                                    else if (Extras.IsReturn(NewWeights))
+                                                    {
+                                                        Console.WriteLine("Returning to Neuron Choice...");
+                                                        NeuronError = true;
+                                                    }
+                                                    else
+                                                    {
+                                                        string[] StringWeights = NewWeights.Split(',');
+
+                                                        if (StringWeights.All(w => double.TryParse(w, out _)))
+                                                        {
+                                                            double[] doubleWeights = StringWeights.Select(w => double.Parse(w)).ToArray();
+                                                            if (doubleWeights.Length == selectedNeuron.GetWeights().Length)
+                                                            {
+                                                                selectedNeuron.SetWeights(doubleWeights);
+                                                                Console.WriteLine("Succesfully changed Neurons Weights");
+                                                            }
+                                                            else
+                                                            {
+                                                                Console.WriteLine($"Please insert {selectedNeuron.GetWeights().Length} weights");
+                                                                AllWeightsError = true;
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            Console.WriteLine("Please give only valid weights (No Text), seperated by commas");
+                                                            AllWeightsError = true;
+                                                        }
+                                                    }
+                                                } while (AllWeightsError);
                                             }
                                             else
                                             {
-                                                Console.WriteLine("Please give only valid weights (No Text), seperated by commas");
-                                                AllWeightsError = true;
+                                                int WeightNumber = int.Parse(WeightState.Value2 ?? "");
+                                                bool WeightValueError = false;
+                                                do {
+                                                    WeightValueError = false;
+                                                    Console.WriteLine($"To what do you want to change the {WeightNumber}. weight?");
+                                                    var NewWeightState = InputCLI.ConfirmInputReturn(null, "numbers");
+                                                    switch (NewWeightState.Value1)
+                                                    {
+                                                        case TriState.Return:
+                                                            Console.WriteLine("Returning to which weight to choose...");
+                                                            WeightsError = true;
+                                                            break;
+                                                        case TriState.False:
+                                                            Console.WriteLine("Please type in a valid number.");
+                                                            WeightValueError = true;
+                                                            break;
+                                                        case TriState.True:
+                                                            double NewWeightValue = double.Parse(NewWeightState.Value2 ?? "");
+                                                            double[] neuronweights = selectedNeuron.GetWeights();
+                                                            double oldValue = neuronweights[WeightNumber - 1];
+                                                            neuronweights[WeightNumber - 1] = NewWeightValue;
+                                                            selectedNeuron.SetWeights(neuronweights);
+                                                            Console.WriteLine($"The weight {WeightNumber} of neuron {neuronNumber} in layer {layerNumber} has been changed from {oldValue} to {NewWeightValue}");
+                                                            break;
+                                                    }
+                                                } while (WeightValueError);
                                             }
-                                        }
-                                    } while (AllWeightsError);
-                                }
-                                else
-                                {
-                                    if (int.TryParse(UserOutput, out int WeightNumber))
-                                    {
-                                        if (WeightNumber <= weights.Length)
-                                        {
-                                            bool WeightValueError = false;
-                                            do {
-                                                WeightValueError = false;
-                                                Console.WriteLine($"To what do you want to change the {WeightNumber}. weight?");
-                                                string NewWeightString = Console.ReadLine() ?? "";
-                                                if (Extras.IsReturn(NewWeightString))
-                                                {
-                                                    Console.WriteLine("Returning to which weight to choose...");
-                                                    WeightsError = true;
-                                                }
-                                                else if (double.TryParse(NewWeightString, out double NewWeightValue))
-                                                {
-                                                    double[] neuronweights = selectedNeuron.GetWeights();
-                                                    double oldValue = neuronweights[WeightNumber - 1];
-                                                    neuronweights[WeightNumber - 1] = NewWeightValue;
-                                                    selectedNeuron.weights = neuronweights;
-                                                    Console.WriteLine($"The weight {WeightNumber} of neuron {neuronNumber} in layer {layerNumber} has been changed from {oldValue} to {NewWeightValue}");
-                                                }
-                                                else
-                                                {
-                                                    Console.WriteLine("Please type in a valid number.");
-                                                    WeightValueError = true;
-                                                }
-                                            } while (WeightValueError);
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine($"The neuron {WeightNumber} is not a valid Layer because the layer is contains just {weights.Length}");
-                                            Console.WriteLine($"Do you want to create {WeightNumber - weights.Length} neurons?(y/n)");
-                                            var state = InputCLI.ConfirmAndReturn();
-                                            if (state == InputCLI.TriState.True) { }//Create neurons
-                                            else if (state == InputCLI.TriState.False) {} //Don't create neurons
-                                            else if (state == InputCLI.TriState.Return) {} //Return
-                                            WeightsError = true;
-                                        }
+                                            break;
                                     }
-                                    else
-                                    {
-                                        Console.WriteLine("Please type in a valid number or 'all'");
-                                        WeightsError = true;
-                                    }
-                                }
+                                } while (WeightsError);
                             }
-                        } while (WeightsError);
+                            else
+                            {
+                                Console.WriteLine("The edit feature isn't currently availble");
+                                Console.WriteLine("Please try again");
+                                NeuronError = true;
+                            }
+                            break;
                     }
                 } while (NeuronError);
             }

@@ -46,7 +46,7 @@ public class InputCLI
             int IntInput;
             try { IntInput = Convert.ToInt32(Input); }
             catch { return ConfirmAndReturn(Values, Input); }
-            return IntInput > FirstNumber && IntInput < SecondNumber ? TriState.True : ConfirmAndReturn(Values, Input);
+            return IntInput >= FirstNumber && IntInput <= SecondNumber ? TriState.True : ConfirmAndReturn(Values, Input);
         }
         else
         {

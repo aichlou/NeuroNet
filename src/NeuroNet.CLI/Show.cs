@@ -20,7 +20,7 @@ static class ShowCLI
     {
         for (int j = 0; j < layer.Count; j++)
         {
-            string weights = string.Join(", ", layer[j].weights.Select(w => w.ToString("F2")));
+            string weights = string.Join(", ", layer[j].GetWeights().Select(w => w.ToString("F2")));
             Console.WriteLine($"  Neuron {j + 1}: Weights: [{weights}]");
         }
     }

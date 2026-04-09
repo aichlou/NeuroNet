@@ -4,9 +4,9 @@ namespace NeuroNet.Core;
 
 public class Neuron
 {
-    public double bias;
-    public double[] weights;
-    public double value;
+    private double bias;
+    private double[] weights;
+    private double value;
     public Neuron(double bias, double[] weights)
     {
         this.bias = bias;
@@ -51,6 +51,15 @@ public class Neuron
     public void SetWeights(double[] input) {
         this.weights = input;
     }
+    public double GetBias()
+    {
+        return this.bias;
+    }
+    public void SetBias(double input)
+    {
+        this.bias = input;
+    }
+
     public NeuronDto ToDto()
     {
         return new NeuronDto
