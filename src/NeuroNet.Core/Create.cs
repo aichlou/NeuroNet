@@ -32,7 +32,7 @@ public class Create {
     {
         try {
             int[] networkData = new int[network.Count + 1];
-            networkData[0] = network[0][0].weights.Length;
+            networkData[0] = network[0][0].GetWeights().Length;
             for (int i = 0; i < network.Count; i++)
             {
                 networkData[i + 1] = network[i].Count;
