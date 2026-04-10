@@ -57,7 +57,7 @@ public class Edit
         }
         return network;
     }
-    public static string CloneFile(string FirstFile, string newFileName, string currentnnName)
+    public static string CloneFile(string FirstFile, string newFileName)
     {
         var dataMulti = Load.ContentOf(FirstFile);
         if (dataMulti.HasError) return $"Error: {dataMulti.ErrorMessage}";

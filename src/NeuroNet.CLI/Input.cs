@@ -42,7 +42,7 @@ public class InputCLI
         {
             string End = Config.Substring("numbers".Length);
             int SecondNumber = End.ToCharArray().Last() == ',' ? int.MaxValue : Convert.ToInt32(End.Substring(End.IndexOf(',') + 1));
-            int FirstNumber = End.ToCharArray().Last() == ',' ? int.MinValue : Convert.ToInt32(End.Remove(End.IndexOf(',') - 1));
+            int FirstNumber = End.ToCharArray().Last() == ',' ? int.MinValue : Convert.ToInt32(End.Remove(End.IndexOf(',')));
             int IntInput;
             try { IntInput = Convert.ToInt32(Input); }
             catch { return ConfirmAndReturn(Values, Input); }
