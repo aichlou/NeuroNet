@@ -41,12 +41,26 @@ public class InputCLI
         else if (Config.StartsWith("numbers"))
         {
             string End = Config.Substring("numbers".Length);
-            int SecondNumber = End.ToCharArray().Last() == ',' ? int.MaxValue : Convert.ToInt32(End.Substring(End.IndexOf(',') + 1));
-            int FirstNumber = End.ToCharArray().Last() == ',' ? int.MinValue : Convert.ToInt32(End.Remove(End.IndexOf(',')));
-            int IntInput;
-            try { IntInput = Convert.ToInt32(Input); }
-            catch { return ConfirmAndReturn(Values, Input); }
-            return IntInput >= FirstNumber && IntInput <= SecondNumber ? TriState.True : ConfirmAndReturn(Values, Input);
+            End = End == "" ? "," : End;
+            if (End.ToCharArray().First() != 'd')
+            {
+                int SecondNumber = End.ToCharArray().Last() == ',' ? int.MaxValue : Convert.ToInt32(End.Substring(End.IndexOf(',') + 1));
+                int FirstNumber = End.ToCharArray().Last() == ',' ? int.MinValue : Convert.ToInt32(End.Remove(End.IndexOf(',')));
+                int IntInput;
+                try { IntInput = Convert.ToInt32(Input); }
+                catch { return ConfirmAndReturn(Values, Input); }
+                return IntInput >= FirstNumber && IntInput <= SecondNumber ? TriState.True : ConfirmAndReturn(Values, Input);
+            }
+            else
+            {
+                End = End == "d" ? "," : End.Substring(1);
+                double SecondNumber = End.ToCharArray().Last() == ',' ? int.MaxValue : Convert.ToDouble(End.Substring(End.IndexOf(',') + 1));
+                double FirstNumber = End.ToCharArray().Last() == ',' ? int.MinValue : Convert.ToDouble(End.Remove(End.IndexOf(',')));
+                double DoubleInput;
+                try { DoubleInput = Convert.ToDouble(Input); }
+                catch { return ConfirmAndReturn(Values, Input); }
+                return DoubleInput >= FirstNumber && DoubleInput <= SecondNumber ? TriState.True : ConfirmAndReturn(Values, Input);
+            }
         }
         else
         {

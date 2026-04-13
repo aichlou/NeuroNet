@@ -137,8 +137,9 @@ internal class Program
                     Console.WriteLine("1. Run the Neural Network");
                     Console.WriteLine("2. Let the Neural Network learn");
                     Console.WriteLine("3. Edit the Neural Network");
-                    Console.WriteLine("4. Return to Load/Create Menu");
-                    Console.WriteLine("5. Exit");
+                    Console.WriteLine("4. Show NeuralNetwork");
+                    Console.WriteLine("5. Return to Load/Create Menu");
+                    Console.WriteLine("6. Exit");
                     string UserOutputString = Console.ReadLine() ?? string.Empty;
                     if (!int.TryParse(UserOutputString, out UserOutput))
                     {
@@ -190,12 +191,16 @@ internal class Program
                                     currentnnName = (editResult.Value ?? throw new Exception("Network cannot be null, when HasError is false")).Value2 ?? currentnnName;
                                 }
                                 break;
-                            case 4: 
+                            case 4:
+                                ShowCLI.ShowNetwork(LoadedNetwork);
+                                Error = true;
+                                break;
+                            case 5: 
                                 Error = false;
                                 again = true;
                                 Way = "";
                                 break;
-                            case 5:
+                            case 6:
                                 Console.WriteLine("Exiting Program...");
                                 Extras.PressKey();
                                 return;

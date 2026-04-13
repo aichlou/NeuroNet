@@ -334,7 +334,7 @@ class EditCLI
                                                         do {
                                                             WeightValueError = false;
                                                             Console.WriteLine($"To what do you want to change the {WeightNumber}. weight?");
-                                                            var NewWeightState = InputCLI.ConfirmInputReturn(null, "numbers");
+                                                            var NewWeightState = InputCLI.ConfirmInputReturn(null, "numbersd");
                                                             switch (NewWeightState.Value1)
                                                             {
                                                                 case TriState.Return:

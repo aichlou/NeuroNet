@@ -9,6 +9,8 @@ static class ShowCLI
     {
         ArgumentNullException.ThrowIfNull(network);
         Console.WriteLine("Showing Network:");
+        int[] WeightLength = network[0].Select(x => x.GetWeights().Length).ToArray();
+        Console.WriteLine($"Layer 0 (Input layer (cannot edit)): {WeightLength.All(x => x == WeightLength[0]) ? WeightLength[0] : WeightLength[1]}");
         for (int i = 0; i < network.Count; i++)
         {
             Console.WriteLine($"Layer {i + 1}:");
