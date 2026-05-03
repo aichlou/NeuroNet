@@ -143,6 +143,8 @@ class EditCLI
                             Error = EditWeightsResult.HasError;
                             if (!Error)
                             {
+                                Console.WriteLine($"Debug, vor Saven");
+                                ShowCLI.ShowNetwork(network);
                                 SaveCLI.SaveNetworkToFileY(network, "overwrite", currentnnName);
                             } 
                             break;
@@ -256,7 +258,7 @@ class EditCLI
                                         double[] weights = network[layerNumber - 1][WeightNumber2 - 1].GetWeights();
                                         Console.WriteLine($"The neuron {WeightNumber2} is not a valid Layer because the layer is contains just {weights.Length}");
                                         Console.WriteLine($"Do you want to create {WeightNumber2 - weights.Length} neurons?(y/n)");
-                                        var state = InputCLI.ConfirmAndReturn();
+                                        var state = InputCLI.ConfirmAndReturn(); //Todo
                                         if (state == InputCLI.TriState.True) { }//Create neurons
                                         else if (state == InputCLI.TriState.False) {} //Don't create neurons
                                         else if (state == InputCLI.TriState.Return) {} //Return
@@ -373,7 +375,7 @@ class EditCLI
                     else
                     {
                         Console.WriteLine($"The Layer {layerNumber} is not a valid Layer because the network is just {network.Count} layers large");
-                        Console.WriteLine($"Do you want to add {layerNumber - network.Count} layers?(y/n)");
+                        Console.WriteLine(layerNumber - network.Count == 1 ? $"Do you want to add {layerNumber - network.Count} layer?(y/n)" : $"Do you want to add {layerNumber - network.Count} layers?(y/n)");
                         var AddLayersState = InputCLI.ConfirmAndReturn();
                         switch(AddLayersState)
                         {
@@ -384,6 +386,7 @@ class EditCLI
                                 int[] NewLayers = new int[layerNumber - network.Count];
                                 NewLayers = NeuronsInLayer(NewLayers, 0);
                                 Console.WriteLine("Creating new layers...");
+                                //Console.WriteLine($"Debug: New Layers: {string.Join(",", NewLayers)}");
                                 network = Edit.AddLayers(network, NewLayers);
                                 break;
                             case TriState.False:
@@ -401,13 +404,16 @@ class EditCLI
                         }
                         else
                         {
-                            Console.WriteLine("You cannot add more than 10 Layers, please insert a smaller number");
+                            Console.WriteLine("This layer does not exist.");
+                            Console.WriteLine("You also cannot add more than 10 Layers at once.");
+                            Console.WriteLine("Please insert a smaller number");
                         }
                     }
                     else
                     {
                         Console.WriteLine("Please insert a valid number");
                     }
+                    Error = true;
                     break;
             }
         } while (Error);

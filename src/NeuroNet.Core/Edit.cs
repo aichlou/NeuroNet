@@ -81,14 +81,18 @@ public class Edit
 
     public static List<List<Neuron>> AddLayers (List<List<Neuron>> network, int[] LayerCount)
     {
+        Console.WriteLine($"Add {LayerCount.Length} Layers");
         for(int i = 0; i < LayerCount.Count(); i++)
         {
+            Console.WriteLine($"Add Layer {i + 1} with {LayerCount[i]} Neurons");
             List<Neuron> Layer = new List<Neuron>(LayerCount[i]);
+            Random rand = new Random();
             double[] emptyWeights = new double[network[network.Count - 1].Count];
-            foreach (Neuron neuron in Layer) {
-                neuron.SetWeights(emptyWeights);
-                Random rand = new Random();
+            for (int j = 0; j < LayerCount[i]; j++) {
+                Console.WriteLine("New Neuron");
+                Neuron neuron = new Neuron(0, emptyWeights);
                 neuron.RandomizeWeights(rand);
+                Layer.Add(neuron);
             }
             network.Add(Layer);
         }
