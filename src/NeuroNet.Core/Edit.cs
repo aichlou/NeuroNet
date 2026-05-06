@@ -79,17 +79,17 @@ public class Edit
         }
     }
 
-    public static List<List<Neuron>> AddLayers (List<List<Neuron>> network, int[] LayerCount)
+    public static List<List<Neuron>> AddLayers(List<List<Neuron>> network, int[] LayerCount)
     {
         Console.WriteLine($"Add {LayerCount.Length} Layers");
         for(int i = 0; i < LayerCount.Count(); i++)
         {
-            Console.WriteLine($"Add Layer {i + 1} with {LayerCount[i]} Neurons");
+            //Console.WriteLine($"Add Layer {i + 1} with {LayerCount[i]} Neurons");
             List<Neuron> Layer = new List<Neuron>(LayerCount[i]);
             Random rand = new Random();
             double[] emptyWeights = new double[network[network.Count - 1].Count];
             for (int j = 0; j < LayerCount[i]; j++) {
-                Console.WriteLine("New Neuron");
+                //Console.WriteLine("New Neuron");
                 Neuron neuron = new Neuron(0, emptyWeights);
                 neuron.RandomizeWeights(rand);
                 Layer.Add(neuron);
@@ -97,5 +97,10 @@ public class Edit
             network.Add(Layer);
         }
         return network;
+    }
+
+    public static List<List<Neuron>> AddNeurons(List<List<Neuron>> network, int layre, int amount)
+    {
+        
     }
 }

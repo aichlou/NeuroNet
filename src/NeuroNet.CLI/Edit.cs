@@ -218,11 +218,11 @@ class EditCLI
         bool Error;
         do {
             Error = false;
-            Console.WriteLine("Enter the layer number of the weight you want to edit:");
+            Console.WriteLine("Enter the number of the layer you want to edit:");
             var LayerState = InputCLI.ConfirmInputReturn([], $"numbers0,{network.Count + 10}");
             switch(LayerState.Value1)
             {
-                case TriState.Return:
+                case TriState.Return: // Retuning to Edit Menu
                     Console.WriteLine("Returning to Edit Menu...");
                     return new MultipleValues<List<List<Neuron>>>
                     {
@@ -230,9 +230,9 @@ class EditCLI
                         Value = network,
                         ErrorMessage = Program.returnString,
                     };
-                case TriState.True:
-                    int layerNumber = int.Parse(LayerState.Value2 ?? "0");
-                    if (int.Parse(LayerState.Value2 ?? "0") <= network.Count)
+                case TriState.True: //Valid layer (Selected or Add)
+                    int layerNumber = int.Parse(LayerState.Value2 ?? "0"); //Layer inputted by the user
+                    if (layerNumber <= network.Count) //Existing Layer
                     {
                         Console.WriteLine($"You selected Layer {layerNumber}:");
                         ShowCLI.ShowLayer(network[layerNumber - 1]);
@@ -240,7 +240,7 @@ class EditCLI
                         do {
                             NeuronError = false;
                             Console.WriteLine($"This layer has {network[layerNumber - 1].Count} neurons.");
-                            Console.WriteLine("Enter the neuron number of the layer you want to edit"); //Todo: Add e for editing the whole layer for things like delete, change position in network, name,etc
+                            Console.WriteLine("Enter the number of the number you want to edit"); //Todo: Add e for editing the whole layer for things like delete, change position in network, name,etc
                             var NeuronState = InputCLI.ConfirmInputReturn(["e"], $"numbers1,{network[layerNumber - 1].Count - 1}");
                             switch (NeuronState.Value1)
                             {
@@ -248,18 +248,24 @@ class EditCLI
                                     Console.WriteLine("Returning to Layer Selection...");
                                     Error = true;
                                     break;
-                                case TriState.False:
+                                case TriState.False: //Neuron does not exist
                                     if (!int.TryParse(NeuronState.Value2, out int WeightNumber2)) {
                                         Console.WriteLine("Please type in a valid number");
                                         NeuronError = true;
                                     }
-                                    else
+                                    else if (WeightNumber2 > network[layerNumber - 1].Count + 9 || WeightNumber2 <= 0) {
+                                        Console.WriteLine("This is no valid neuron. Please type in a valid neuron.");
+                                    }
+                                    else 
                                     {
                                         double[] weights = network[layerNumber - 1][WeightNumber2 - 1].GetWeights();
                                         Console.WriteLine($"The neuron {WeightNumber2} is not a valid Layer because the layer is contains just {weights.Length}");
                                         Console.WriteLine($"Do you want to create {WeightNumber2 - weights.Length} neurons?(y/n)");
-                                        var state = InputCLI.ConfirmAndReturn(); //Todo
-                                        if (state == InputCLI.TriState.True) { }//Create neurons
+                                        var state = InputCLI.ConfirmAndReturn();
+                                        if (state == InputCLI.TriState.True) //Create neurons
+                                        {
+                                            
+                                        }
                                         else if (state == InputCLI.TriState.False) {} //Don't create neurons
                                         else if (state == InputCLI.TriState.Return) {} //Return
                                     }
