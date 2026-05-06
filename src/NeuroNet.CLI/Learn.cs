@@ -30,7 +30,7 @@ public class Learn
                 Console.WriteLine("0.1,0.9,0.3");
                 Console.WriteLine("0");
                 Console.WriteLine();
-                Extras.PressKey();
+                InputCLI.PressKey();
                 Error = true;
             }
             else if (Extras.IsReturn(path))
@@ -40,7 +40,7 @@ public class Learn
             }
             else if (!Directory.Exists(path)) {
                 Console.WriteLine("You need to insert a existing path.");
-                Extras.PressKey();
+                InputCLI.PressKey();
                 Error = true;
             }
             else
@@ -50,7 +50,7 @@ public class Learn
                 if(dataSet.GetLength(0) == 0 && dataSet.GetLength(1) == 0 && dataSet.GetLength(2) == 0) {
                     Console.WriteLine("The File is broken...");
                     Error = true;
-                    Extras.PressKey();
+                    InputCLI.PressKey();
                 }
                 else
                 { //Das sollte in .Core (Also der Lern Block)

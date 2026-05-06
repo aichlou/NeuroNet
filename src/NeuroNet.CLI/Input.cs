@@ -34,7 +34,7 @@ public class InputCLI
         if (Input == null) Input = Console.ReadLine() ?? "";
         if (Extras.IsReturn(Input)) return TriState.Return;
         if (Config == null)
-        {
+        { 
             if (Values == null) Values = ["yes", "y"];
             return Values.Contains(Input) ? TriState.True : TriState.False;         
         }
@@ -77,5 +77,20 @@ public class InputCLI
             Value1 = state,
             Value2 = Input
         };
+    }
+
+        public static void PressKey()
+    {
+        if (!Console.IsInputRedirected)
+        {   
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+        }
+        else
+        {
+            Console.WriteLine("Input is redirected, Press Enter to continue...");
+            Console.Read(); //This is to prevent errors when input is redirected
+        }
+        Console.WriteLine();
     }
 }

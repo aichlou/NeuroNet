@@ -41,7 +41,7 @@ internal class Program
                             else
                             {
                                 Console.WriteLine("Please type in a valid number");
-                                Extras.PressKey();
+                                InputCLI.PressKey();
                                 Error = true;
                             }
                         }
@@ -81,7 +81,7 @@ internal class Program
                                     if (again)
                                     {
                                         Console.WriteLine("Deleting old Network & Creating new Network...");
-                                        if (SaveCLI.DeleteFile(currentnnName)) Extras.PressKey();
+                                        if (SaveCLI.DeleteFile(currentnnName)) InputCLI.PressKey();
                                         else //Return Keyword was typed in
                                         {
                                             Console.WriteLine("Why do you do that?");
@@ -104,7 +104,7 @@ internal class Program
                             if (result.HasError)
                             {
                                 Error = true;
-                                if (result.ErrorMessage != "User exited load process.") Extras.PressKey();
+                                if (result.ErrorMessage != "User exited load process.") InputCLI.PressKey();
                             }
                             else
                             {
@@ -118,7 +118,7 @@ internal class Program
                         default:
                             if(!Error) {
                                 Console.WriteLine("Please type in one of the shown options");
-                                Extras.PressKey();
+                                InputCLI.PressKey();
                                 Error = true;
                             }
                             break;
@@ -127,7 +127,7 @@ internal class Program
                 } while (Error);
                 if (LoadedNetwork is null) throw new InvalidOperationException("LoadedNetwork must not be null here");
 
-                Extras.PressKey();
+                InputCLI.PressKey();
                 LoadedNetwork = EditCLI.RandomizeIfNeeded(LoadedNetwork, currentnnName);
                 UserOutput = 0;
                 do {
@@ -192,7 +192,25 @@ internal class Program
                                 }
                                 break;
                             case 4:
-                                ShowCLI.ShowNetwork(LoadedNetwork);
+                                bool WithWeights = false;
+                                Console.WriteLine("Do you want to see the Weights or not? (y/n)");
+                                switch (InputCLI.ConfirmAndReturn())
+                                {
+                                    case InputCLI.TriState.True:
+                                        WithWeights = true;
+                                        break;
+                                    case InputCLI.TriState.False:
+                                        WithWeights = false;
+                                        break;
+                                    case InputCLI.TriState.Return:
+                                        Error = true;
+                                        Console.WriteLine("Returning to Main Menu...");
+                                        break;
+                                }
+                                if (!Error) {
+                                    ShowCLI.ShowNetwork(LoadedNetwork, WithWeights);
+                                    InputCLI.PressKey();
+                                }
                                 Error = true;
                                 break;
                             case 5: 
@@ -202,7 +220,7 @@ internal class Program
                                 break;
                             case 6:
                                 Console.WriteLine("Exiting Program...");
-                                Extras.PressKey();
+                                InputCLI.PressKey();
                                 return;
                             default:
                                 Console.WriteLine("Please insert one of the shown Options");
@@ -213,7 +231,7 @@ internal class Program
                 }
                 while (Error);
             } while (again);
-            Extras.PressKey();
+            InputCLI.PressKey();
             Console.WriteLine("Returning to Main Menu...");
             Console.WriteLine("------------------------------");
         }

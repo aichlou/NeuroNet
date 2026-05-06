@@ -11,7 +11,7 @@ class LoadCLI {
             Console.WriteLine("The Directory where the Networks should be located does not exist.");
             Console.WriteLine("Do you want to load the File from another Directory?");
             Console.WriteLine("If yes, its not implemented yet, so just create a Network and the Directroy will be created automatically.");
-            Extras.PressKey();
+            InputCLI.PressKey();
             return new MultipleValues<TwoValues<List<List<Neuron>>, string?>>
             {
                 Value = new TwoValues<List<List<Neuron>>, string?> { Value1 = null},

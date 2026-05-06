@@ -42,7 +42,7 @@ public class RunCLI
                         {
                             Console.WriteLine($"Invalid number of inputs. Expected {InputLength} values.");
                             Console.WriteLine($"You entered {inputData.Count} values.");
-                            Extras.PressKey();
+                            InputCLI.PressKey();
                             Error = true;
                         }
                         /*else
@@ -57,7 +57,7 @@ public class RunCLI
                     catch (FormatException)
                     {
                         Console.WriteLine("Invalid input format. Please ensure you enter numbers separated by commas.");
-                        Extras.PressKey();
+                        InputCLI.PressKey();
                         Error = true;
                     }
                 }

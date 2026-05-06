@@ -118,7 +118,7 @@ class EditCLI
                                 }
                             } while (RangeError);
                             SaveCLI.SaveNetworkToFileY(network, "overwrite", currentnnName);
-                            ShowCLI.ShowNetwork(network);
+                            ShowCLI.ShowNetwork(network, false);
                             Console.WriteLine("Weights randomized and saved to file");
                             break;
                         case "2":
@@ -144,7 +144,7 @@ class EditCLI
                             if (!Error)
                             {
                                 Console.WriteLine($"Debug, vor Saven");
-                                ShowCLI.ShowNetwork(network);
+                                ShowCLI.ShowNetwork(network, false);
                                 SaveCLI.SaveNetworkToFileY(network, "overwrite", currentnnName);
                             } 
                             break;
@@ -214,7 +214,7 @@ class EditCLI
                 ErrorMessage = "Network is null."
             };
         }
-        ShowCLI.ShowNetwork(network);
+        ShowCLI.ShowNetwork(network, false);
         bool Error;
         do {
             Error = false;
@@ -264,10 +264,18 @@ class EditCLI
                                         var state = InputCLI.ConfirmAndReturn();
                                         if (state == InputCLI.TriState.True) //Create neurons
                                         {
-                                            
+                                            network = Edit.AddNeurons(network, layerNumber - 1, WeightNumber2 - weights.Length);
+                                            Console.WriteLine($"Appended {WeightNumber2 - weights.Length} Neurons into Layer ");
                                         }
-                                        else if (state == InputCLI.TriState.False) {} //Don't create neurons
-                                        else if (state == InputCLI.TriState.Return) {} //Return
+                                        else if (state == InputCLI.TriState.False) //Don't create neurons
+                                        {
+                                            Console.WriteLine("Didnt inserted Neurons");
+                                        }
+                                        else if (state == InputCLI.TriState.Return)
+                                        {
+                                            Console.WriteLine("Returning to Neuron Selection");
+                                            NeuronError = true;
+                                        } //Return
                                     }
                                     break;
                                 case TriState.True:
@@ -434,7 +442,7 @@ class EditCLI
 
     static public MultipleValues<List<List<Neuron>>> NumberLayerNeurons (List<List<Neuron>> network) //TODO
     {
-        ShowCLI.ShowNetwork(network);
+        ShowCLI.ShowNetwork(network, false);
 
 
         return new MultipleValues<List<List<Neuron>>>

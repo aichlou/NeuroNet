@@ -99,8 +99,29 @@ public class Edit
         return network;
     }
 
-    public static List<List<Neuron>> AddNeurons(List<List<Neuron>> network, int layre, int amount)
+    public static List<List<Neuron>> AddNeurons(List<List<Neuron>> network, int layer, int amount)
     {
-        
+        Random rand = new Random();
+        double[] emptyWeights = new double[network[layer - 1].Count];
+        Neuron[] newNeurons = new Neuron[amount];
+        for(int i = 0; i < newNeurons.Length; i++)
+        {
+            Neuron newNeuron = new Neuron(0, emptyWeights);
+            newNeuron.RandomizeWeights(rand);
+            newNeurons[i] = newNeuron;
+        }
+        network[layer].AddRange(newNeurons);
+        if (layer != network.Count - 1)
+        {
+            foreach(Neuron neuron in network[layer + 1])
+            {
+                double[] Weights = neuron.GetWeights();
+                double average = Weights.Average();
+                double[] addWeights = Enumerable.Repeat(average, amount).ToArray();
+                double[] newWeights = Weights.Concat(addWeights).ToArray();
+                neuron.SetWeights(newWeights);
+            }
+        }
+        return network;
     }
 }

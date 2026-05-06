@@ -5,7 +5,7 @@ using NeuroNet.Core;
 
 static class ShowCLI
 {
-    public static void ShowNetwork(List<List<Neuron>> network)
+    public static void ShowNetwork(List<List<Neuron>> network, bool WithWeights)
     {
         ArgumentNullException.ThrowIfNull(network);
         Console.WriteLine("Showing Network:");
@@ -14,16 +14,17 @@ static class ShowCLI
         for (int i = 0; i < network.Count; i++)
         {
             Console.WriteLine($"Layer {i + 1}:");
-            ShowLayer(network[i]);
+            Console.WriteLine(WithWeights ? ShowLayer(network[i]) : $"{network[i].Count} Neurons");
         }
     }
 
-    public static void ShowLayer(List<Neuron> layer)
+    public static string ShowLayer(List<Neuron> layer)
     {
         for (int j = 0; j < layer.Count; j++)
         {
             string weights = string.Join(", ", layer[j].GetWeights().Select(w => w.ToString("F2")));
             Console.WriteLine($"  Neuron {j + 1}: Weights: [{weights}]");
         }
+        return "";
     }
 }
